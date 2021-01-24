@@ -28,8 +28,9 @@ class MathUtils{
     static getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
-        let random_value =  Math.floor(Math.random() * (max - min + 1)) + min;
+        let random_value = Math.floor(Math.random() * (max - min + 1)) + min;
         return random_value;
+
     }
 
     /**

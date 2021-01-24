@@ -1,11 +1,12 @@
 import * as mUtils from './utils.js';
+import {Vec4} from "./mathObjects.js";
 
 
 class ObjParser {
 
     constructor(inputElement) {
         //this.inputElement = inputElement;
-        this.fileStatus = this.setFileStatus(ObjParser.EMPTY);
+        this.setStatus(ObjParser.STATUS_EMPTY);
         this.selectedFiles = [];
         this.processedNoOfFiles = 0;
         this.objectData = {};
@@ -15,35 +16,57 @@ class ObjParser {
         //this.vertexNormals = {};
         Array.from(inputElement.files).forEach(file => {
             /* loose checks for obj files */
-            if (file.name.endsWith(ObjParser.OBJ_EXTENSION)) {
+            if ( file.name.endsWith(ObjParser.OBJ_EXTENSION) ) {
                 if (file.type === ObjParser.OBJ_FILE_TYPE) {
                     this.getSelectedFiles().push(file);
                     this.getObjectData()[file.name] = {};
-                }else{
-                    console.log(file.name+" is not a valid 3D obj file");
+                } else {
+                    console.log(file.name + " is not a valid 3D obj file");
                 }
             } else {
-                if(file.name.endsWith(ObjParser.OBJ_MATERIAL_FORMAT)) {
-                    console.log(file.name+" is a wavefront material file. Materials are currently not supported");
-                }else{
-                    console.log(file.name+" is not a valid 3D obj file");
+                if (file.name.endsWith(ObjParser.OBJ_MATERIAL_FORMAT)) {
+                    console.log(file.name + " is a wavefront material file. Materials are currently not supported");
+                } else {
+                    console.log(file.name + " is not a valid 3D obj file");
                 }
             }
         });
+
+
         this.totalFiles = this.getSelectedFiles().length;
+        if(this.totalFiles === 0){alert('No valid file(s) have been selected');return;};
 
         this.getSelectedFiles().forEach(file => {
             let dataSlot = this.getObjectData()[file.name];
             this.parseFile(dataSlot, file);
         });
 
-        console.log("Object data: ", this.getObjectData());
     }
 
     getObjectData() {
         return this.objectData;
     }
 
+    getAllFileNames() {
+        let allFiles = [];
+        for (let eachFile in this.getObjectData()) {
+            allFiles.push(eachFile);
+        }
+        return allFiles;
+    }
+
+    getObjectNamesInFile(fileName) {
+        let allObjects = [];
+        console.log("object data: ", (this.getObjectData()['cube.obj'])['Cube_Cube.001'] );
+        for (let eachObject in this.getObjectData()[fileName]) {
+            allObjects.push(eachObject);
+        }
+        return allObjects;
+    }
+
+    getObjectAttributes(fileName, objectName, attribute){
+        return this.getObjectData()[fileName][objectName][attribute];
+    }
 
     parseFile(dataSlot, file) {
         let fileReader = new FileReader();
@@ -52,7 +75,12 @@ class ObjParser {
             rawFileData = fileReader.result;
             fileReader = null;//release memory
             if (rawFileData !== '') {
-                this.extractData(dataSlot, rawFileData);
+                if(this.extractData(dataSlot, rawFileData) ){ /*at least one file has at least one object with properties*/
+                    console.log("files contain at least one object");
+                    this.setStatus(ObjParser.STATUS_PENDING);
+                }
+                console.log("file status: ", this.getStatus());
+                console.log( "file data object FINALFINALFINAL: ", this.getObjectData() );
             }
         }.bind(this);
 
@@ -65,31 +93,33 @@ class ObjParser {
 
     extractData(dataSlot, rawData) {
         //vertices may be in different groups
-        rawData = rawData.trim().split(/\r\n|\n/);
+        rawData = rawData.trim().split( /\r\n|\n/ );
         let currentObjectDataSlot = null;
-        rawData.forEach( line=>{
+        rawData.forEach( line => {
 
-            if(mUtils.StringUtils.beginsExact(line, ObjParser.OBJ_OBJECT_CMD, ' ')  ){
-               let objectName = line.split(' ')[ObjParser.OBJ_DATA_INDEX];
-               currentObjectDataSlot = dataSlot[objectName]={};
-               this.getObjectProperties()
-                   .forEach(function(objectProperty){
-                         currentObjectDataSlot[objectProperty]=[];
-                   });
+            if (mUtils.StringUtils.beginsExact(line, ObjParser.OBJ_OBJECT_CMD, ' ')) {
+                let objectName = line.split(' ')[ObjParser.OBJ_DATA_INDEX];
+                dataSlot[objectName] = {};
+                currentObjectDataSlot = dataSlot[objectName];
+                this.getObjectProperties()
+                    .forEach( function (objectProperty) {
+                        currentObjectDataSlot[objectProperty] = [];
+                    } );
 
-            }else if(mUtils.StringUtils.beginsExact(line, ObjParser.OBJ_VERT_CMD, ' ')){
-                let singleVertex = [];
+            } else if (mUtils.StringUtils.beginsExact(line, ObjParser.OBJ_VERT_CMD, ' ')) {
+                let singleVertex = new Vec4();
                 let vertexInfo = line.trim().split(' ');
-                for(let i = ObjParser.OBJ_DATA_INDEX; i < vertexInfo.length; i++){
-                    singleVertex.push(parseFloat(vertexInfo[i]));
+                for (let i = ObjParser.OBJ_DATA_INDEX; i < vertexInfo.length; i++) {
+                    singleVertex.iSet( i-ObjParser.OBJ_DATA_INDEX, parseFloat(vertexInfo[i]) );
                 }
-                currentObjectDataSlot[ObjParser.OBJ_VERT_CMD].push( singleVertex );
+                currentObjectDataSlot[ObjParser.OBJ_VERT_CMD].push(singleVertex);
 
-            }else if (mUtils.StringUtils.beginsExact(line, ObjParser.OBJ_FACE_CMD, ' ')) {
+            } else if (mUtils.StringUtils.beginsExact(line, ObjParser.OBJ_FACE_CMD, ' ')) {
                 let singleFVI = [];
                 // single FVTI and FVN declaration HERE - added when support for texture coordinate is implemented
+
                 let faceInfo = line.trim().split(' ');
-                for(let i = ObjParser.OBJ_DATA_INDEX; i < faceInfo.length; i++){
+                for ( let i = ObjParser.OBJ_DATA_INDEX; i < faceInfo.length; i++ ) {
 
                     let eachIndexGroup = faceInfo[i].trim().split('/');
                     let FVIIndex = parseInt(eachIndexGroup[ObjParser.OBJ_FVI_POSITION]) + ObjParser.OBJ_INDEX_FIX;
@@ -100,7 +130,18 @@ class ObjParser {
                 }
                 currentObjectDataSlot[ObjParser.OBJ_FVI_mCMD].push(singleFVI);
             }
-        } );
+        });
+
+
+
+        this.updateProcessedFileCount();
+
+        if(currentObjectDataSlot === undefined ||
+           Object.entries(currentObjectDataSlot[ObjParser.OBJ_VERT_CMD]).length === 0 ){
+            return false;
+        }
+
+        return true;
 
     }
 
@@ -114,7 +155,6 @@ class ObjParser {
         this.processedNoOfFiles += 1;
     }
 
-
     getTotalFileCount() {
         return this.totalFiles;
     }
@@ -123,8 +163,8 @@ class ObjParser {
         return this.selectedFiles;
     }
 
-    setFileStatus(fileStatus) {
-        this.fileStatus = fileStatus;
+    setStatus(fileStatus) {
+        this.processingStatus = fileStatus;
     }
 
 
@@ -132,17 +172,24 @@ class ObjParser {
     * gets the names of all the parsed object
     * properties available through the ObjParser
     * */
-    getObjectProperties(){
+    getObjectProperties() {
         return [ObjParser.OBJ_VERT_CMD, ObjParser.OBJ_FVI_mCMD];
     }
 
-    getFileStatus() {
-        return this.fileStatus;
+    getStatus() {
+        /* if the file contains at least one object
+        * and the valid files are all processed
+        * then mark the status as ready*/
+        if((this.processingStatus === ObjParser.STATUS_PENDING) &&
+            (this.getProcessedFileCount() === this.getSelectedFiles().length) ){
+            this.setStatus(ObjParser.STATUS_READY);
+        }
+        return this.processingStatus;
     }
 
     /* GETTERS- REPLACEMENT FOR STATIC VARIABLES*/
 
-    static get OBJ_MAX_VERT_COUNT(){
+    static get OBJ_MAX_VERT_COUNT() {
         return 1000;
     }
 
@@ -150,7 +197,7 @@ class ObjParser {
     * OBJ files number vertices from 1,
     * while we index them starting from 0
     * */
-    static get OBJ_INDEX_FIX(){
+    static get OBJ_INDEX_FIX() {
         return -1;
     }
 
@@ -168,7 +215,7 @@ class ObjParser {
     * the `m` stands for not a standard obj command, used as command
     * denoter for parsed values
     * */
-    static get OBJ_FVI_mCMD(){
+    static get OBJ_FVI_mCMD() {
         return 'fvi';
     }
 
@@ -176,8 +223,12 @@ class ObjParser {
     * constant 0;
     * position in the f x/y/z face to vert,tex coord, normal
     * index grouping system*/
-    static get OBJ_FVI_POSITION(){
+    static get OBJ_FVI_POSITION() {
         return 0;
+    }
+
+    static get OBJ_NORM_CMD(){
+        return 'vn';
     }
 
     static get OBJ_VERT_CMD() {
@@ -217,17 +268,11 @@ class ObjParser {
         return '.obj';
     }
 
-    static get OBJ_MATERIAL_FORMAT(){
+    static get OBJ_MATERIAL_FORMAT() {
         return '.mtl';
     }
 
 }
 
 
-function main(){
-    const inputElement = document.querySelector('input[type=file]');
-    let mVar = new ObjParser(inputElement);
-
-}
-
-window.onload = main;
+export {ObjParser};
