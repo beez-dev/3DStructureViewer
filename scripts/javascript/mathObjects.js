@@ -1,10 +1,5 @@
 class Vector{
     constructor(){
-        this.coords = [];
-    }
-
-    getCoords(){
-        return this.coords;
     }
 
     /*gets magnitude of the vector*/
@@ -18,6 +13,10 @@ class Vector{
 
         return magnitude;
     }
+
+    getCoords(){
+        return [];
+    }
 }
 
 class Vec2 extends Vector{
@@ -25,7 +24,6 @@ class Vec2 extends Vector{
         super();
         this.X = x;
         this.Y = y;
-        this.coords = this.getCoords().concat([this.x, this.y]);
     }
 
     get x(){return this.X};
@@ -34,12 +32,20 @@ class Vec2 extends Vector{
     setX(x){this.X = x;}
     setY(y){this.Y = y;}
 
+    /*
+    * sets value of coords with the help of index
+    * x=0;y=1;z=2,w=3
+    * */
     iSet(i, value){
         if(i===this.xIndex){
             this.setX(value);
         }else if(i === this.yIndex){
             this.setY(value);
         }
+    }
+
+    getCoords() {
+        return [this.x, this.y];
     }
 
     get xIndex(){
@@ -56,7 +62,6 @@ class Vec3 extends Vec2{
     constructor(x=0, y=0, z=0) {
         super(x, y);
         this.Z = z;
-        this.coords = this.getCoords().concat([this.z]);
     }
 
     get z(){return this.Z};
@@ -70,6 +75,10 @@ class Vec3 extends Vec2{
         if(i === this.zIndex){
             this.Z = value;
         }
+    }
+
+    getCoords() {
+        return [this.x,this.y,this.z];
     }
 
     getVec2(){
@@ -86,7 +95,6 @@ class Vec4 extends Vec3{
     constructor(x=0, y=0, z=0, w=1){
         super(x, y, z);
         this.W = w;
-        this.coords = this.getCoords().concat([this.w]);
     }
 
     /*
@@ -100,11 +108,7 @@ class Vec4 extends Vec3{
 
     setW(w){this.W = w;}
 
-    /*
-    * sets the value of coordinates with the
-    * position of i;
-    * 0=setX,1=setY,2=setZ,3=setW
-    * */
+
     iSet(i, value){
         super.iSet(i, value);
         if(i === this.wIndex){
@@ -112,6 +116,9 @@ class Vec4 extends Vec3{
         }
     }
 
+    getCoords() {
+        return [this.x,this.y,this.z,this.w];
+    }
 
     /*
      * index of w;
@@ -122,4 +129,4 @@ class Vec4 extends Vec3{
 
 }
 
-export {Vec4};
+export {Vec2, Vec3, Vec4};

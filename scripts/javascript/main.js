@@ -1,4 +1,7 @@
-import * as mParser from './ObjParser.js';
+import {ObjParser} from "./ObjParser.js";
+import {MeshUtils} from "./meshUtils.js";
+import {Vec2, Vec3} from "./mathObjects.js";
+import {utils} from "./test.js"
 
 function main(){
 
@@ -14,36 +17,61 @@ function main(){
     mCtx.fillRect( 0,0,width,height );
 
     let input = document.querySelector("input[type=file]");
-
+    let meshUtil = new MeshUtils();
     let parser = null;
+
+    function simplePerspective(vec3) {
+        let focalLength = 100;
+
+        let newX = (focalLength*(vec3.x)/(vec3.z+2))+100;
+
+        console.log("y values: ", vec3.y);
+        let newY = (focalLength * -(vec3.y)/(vec3.z+2))+100;
+
+
+        return new Vec2(newX, newY);
+    }
+
     input.addEventListener('change', function (e) {
-        parser = new mParser.ObjParser(e.target);
-        console.log("file status from main: ", parser.getStatus());
-        let objectData = parser.getObjectData();
+        mCtx.clearRect(0,0,width,height);
+        parser = new ObjParser(e.target,
+            function(){
+                let filename = parser.getAvailableFileNames(); /*single file support only*/
+                /*filename.forEach(
+                    function(filenamed){
+                        console.log("file name: ", filenamed);
+                        let allObjects = parser.getAvailableObjectNames(filenamed);
+                        allObjects.forEach(function(eachObject){
+                            console.log(eachObject);
+                            console.log(parser.getAllVertices(filenamed,eachObject, ObjParser.OBJ_VERT_CMD));
+                        });
+
+                    }
+                );*/
+                let objectName = parser.getAvailableObjectNames(filename);
+                let vertices = parser.getAllVertices(filename, objectName);
+                let fvis = parser.getAllFvis(filename, objectName);
+
+                let projectedPoints = [];
+
+                let mCube = [
+                    new Vec3()
+                ]
+
+                vertices.forEach(
+                    function(vertex){
+                        projectedPoints.push( simplePerspective(vertex) );
+                    });
+
+                meshUtil.drawFaceStroke(mCtx,projectedPoints, fvis);
+            }
+        );
     });
 
-    /*let vertexData = [
-        [-1.000000,-1.000000, 1.000000],
-        [-1.000000, 1.000000, 1.000000],
-        [-1.000000, -1.000000, -1.000000],
-        [-1.000000, 1.000000 ,-1.000000],
-        [1.000000, -1.000000, 1.000000],
-        [1.000000, 1.000000, 1.000000],
-        [1.000000, -1.000000, -1.000000],
-        [1.000000, 1.000000, -1.000000]
-    ];
 
-    let vertexIndex = [
-        [1, 2, 4, 3],
-        [3, 4, 8, 7],
-        [7, 8, 6, 5],
-        [5, 6, 2, 1],
-        [3, 7, 5, 1],
-        [8, 4, 2, 6]
-    ];
 
-    let mWidth = 600;
-    let mHeight = 500;*/
+
+
 
 
 

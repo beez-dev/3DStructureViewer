@@ -3,17 +3,22 @@ import {Vec4} from "./mathObjects.js";
 
 
 class ObjParser {
-
-    constructor(inputElement) {
+    /*
+    * input element - input element containing files
+    * */
+    constructor(inputElement, onReady=null) {
         //this.inputElement = inputElement;
         this.setStatus(ObjParser.STATUS_EMPTY);
         this.selectedFiles = [];
         this.processedNoOfFiles = 0;
         this.objectData = {};
+        this.onReady = null;
+        if( onReady!=null ) {
+            this.onReady = onReady;
+        }
 
-
-        //this.vertexTextureCoords = {};
-        //this.vertexNormals = {};
+        // this.vertexTextureCoords = {};
+        // this.vertexNormals = {};
         Array.from(inputElement.files).forEach(file => {
             /* loose checks for obj files */
             if ( file.name.endsWith(ObjParser.OBJ_EXTENSION) ) {
@@ -41,6 +46,10 @@ class ObjParser {
             this.parseFile(dataSlot, file);
         });
 
+    }
+
+    getReadyStateCallback(){
+        return this.onReady;
     }
 
     getObjectData() {
@@ -75,12 +84,17 @@ class ObjParser {
             rawFileData = fileReader.result;
             fileReader = null;//release memory
             if (rawFileData !== '') {
-                if(this.extractData(dataSlot, rawFileData) ){ /*at least one file has at least one object with properties*/
-                    console.log("files contain at least one object");
+                if( this.extractData(dataSlot, rawFileData) ){ /*at least one file has at least one object with properties*/
                     this.setStatus(ObjParser.STATUS_PENDING);
                 }
-                console.log("file status: ", this.getStatus());
-                console.log( "file data object FINALFINALFINAL: ", this.getObjectData() );
+
+                if( this.getStatus() === ObjParser.STATUS_READY ){
+                    let callback = this.getReadyStateCallback();
+                    if(callback!=null){
+                        callback();
+                    }
+                }
+
             }
         }.bind(this);
 
@@ -90,6 +104,21 @@ class ObjParser {
         fileReader.readAsText(file);
     }
 
+    getAvailableFileNames(){
+        return Object.keys(this.getObjectData());
+    }
+
+    getAvailableObjectNames(filename){
+        return Object.keys(this.getObjectData()[filename]) ;
+    }
+
+    getAllVertices(filename, objectName){
+        return this.getObjectData()[filename][objectName][ ObjParser.OBJ_VERT_CMD ];
+    }
+
+    getAllFvis( filename, objectName ){
+        return this.getObjectData()[filename][objectName][ ObjParser.OBJ_FVI_mCMD ];
+    }
 
     extractData(dataSlot, rawData) {
         //vertices may be in different groups
