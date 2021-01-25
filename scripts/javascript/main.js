@@ -2,12 +2,13 @@ import {ObjParser} from "./ObjParser.js";
 import {MeshUtils} from "./utils/meshUtils.js";
 import {Vec2, Vec3} from "./utils/mathObjects.js";
 import {Transformation} from "./transformation.js";
+import * as global from "./GLOBALs.js";
 
 function main(){
 
     let mCtx = document.querySelector('canvas').getContext('2d');
-    let width = GLOBAL_WIDTH;
-    let height = GLOBAL_HEIGHT;
+    let width = global.WIDTH;
+    let height = global.HEIGHT;
 
     let mTransform = new Transformation();
 

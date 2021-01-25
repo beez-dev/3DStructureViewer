@@ -1,4 +1,6 @@
 import {Vec4} from "./utils/mathObjects.js";
+import * as global from "./GLOBALs.js";
+
 
 class Transformation{
 
@@ -15,7 +17,7 @@ class Transformation{
 
     /*perspective projection matrix transformation
     * */
-    perspectiveProjection(vec4, aspectRatio, fovHalf=45, near = 1, far = 500){
+    perspectiveProjection(vec4, aspectRatio, fovHalf=45, near = 1.6, far = 500){
 
         if(this.getProjectionRecalc()) {
         /*recalculate*/
@@ -50,6 +52,12 @@ class Transformation{
 
     }
 
+    correctiveTransform(vec4){
+        vec4.setY(-vec4.y);
+        vec4.setZ(-vec4.z);
+        return vec4;
+    }
+
     ndcTransform(vec4){
         let wValue = vec4.w;
         vec4.setX((vec4.x/wValue));
@@ -72,8 +80,8 @@ class Transformation{
     }
 
     screenTransform(vec4){
-        vec4.setX(vec4.x);
-        vec4.setY(vec4.y);
+        vec4.setX((vec4.x * global.WIDTH) +global.WIDTH/2  );/*translate to center of the screen*/
+        vec4.setY((vec4.y * global.HEIGHT)+global.HEIGHT/2 );
 
         return vec4;
     }
@@ -86,9 +94,12 @@ class Transformation{
     pipeline(vec4){
         return this.screenTransform(
                  this.ndcTransform(
-                    this.perspectiveProjection(vec4,500/600)
+                    this.perspectiveProjection(
+                        global.mCamera.viewTransform(this.correctiveTransform(vec4)),
+                        global.WIDTH/global.HEIGHT
+                    )
                 )
-            );
+        );
     }
 
     /*
