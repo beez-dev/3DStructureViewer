@@ -1,5 +1,5 @@
-import * as mUtils from './utils.js';
-import {Vec4} from "./mathObjects.js";
+import * as mUtils from './utils/utils.js';
+import {Vec4} from "./utils/mathObjects.js";
 
 
 class ObjParser {

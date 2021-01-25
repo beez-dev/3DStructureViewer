@@ -12,7 +12,9 @@ class MeshUtils{
     drawFace(ctx, vertices, fvi){
 
         ctx.beginPath();
-        ctx.moveTo((vertices[fvi[0]].x), (vertices[fvi[0]].y));
+        ctx.moveTo(
+            (vertices[fvi[0]].x), (vertices[fvi[0]].y)
+        );
 
         for(let i=1; i < fvi.length; i++){
             ctx.lineTo( (vertices[fvi[i]].x), (vertices[fvi[i]].y)  );
@@ -20,7 +22,6 @@ class MeshUtils{
     }
 
     drawFaceStroke(ctx, vertices, fvis){
-
         fvis.forEach(
             function(fvi){
                 this.drawFace(ctx, vertices, fvi);
@@ -28,7 +29,6 @@ class MeshUtils{
                 ctx.stroke();
             }.bind(this)
         )
-
     }
 
     drawFaceFill(ctx, vertices, fvis){
