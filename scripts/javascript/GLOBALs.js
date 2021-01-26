@@ -9,12 +9,4 @@ const mCamera = new CameraFlyStyle(
     );
 
 
-
-setInterval(
-    function(){
-        mCamera.R.x += 0.5
-    }, 500
-)
-
-
 export {HEIGHT, WIDTH, mCamera};

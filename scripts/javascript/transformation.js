@@ -1,5 +1,6 @@
 import {Vec4} from "./utils/mathObjects.js";
 import * as global from "./GLOBALs.js";
+import {mCamera} from "./GLOBALs.js";
 
 
 class Transformation{
@@ -17,7 +18,7 @@ class Transformation{
 
     /*perspective projection matrix transformation
     * */
-    perspectiveProjection(vec4, aspectRatio, fovHalf=45, near = 1.6, far = 500){
+    perspectiveProjection(vec4, aspectRatio, fovHalf=45, near = .1, far = 500){
 
         if(this.getProjectionRecalc()) {
         /*recalculate*/
@@ -52,11 +53,7 @@ class Transformation{
 
     }
 
-    correctiveTransform(vec4){
-        vec4.setY(-vec4.y);
-        vec4.setZ(-vec4.z);
-        return vec4;
-    }
+
 
     ndcTransform(vec4){
         let wValue = vec4.w;
@@ -80,8 +77,8 @@ class Transformation{
     }
 
     screenTransform(vec4){
-        vec4.setX((vec4.x * global.WIDTH) +global.WIDTH/2  );/*translate to center of the screen*/
-        vec4.setY((vec4.y * global.HEIGHT)+global.HEIGHT/2 );
+        vec4.setX((vec4.x * global.WIDTH) + global.WIDTH/2 );/*translate to center of the screen*/
+        vec4.setY((vec4.y * global.HEIGHT) + global.HEIGHT/2 );
 
         return vec4;
     }
@@ -91,23 +88,23 @@ class Transformation{
     * transforms it through the rendering pipeline;
     * vec4 come from the model space
     * */
-    pipeline(vec4){
+    pipeline(vec4In, vec4Out){
         return this.screenTransform(
                  this.ndcTransform(
                     this.perspectiveProjection(
-                        global.mCamera.viewTransform(this.correctiveTransform(vec4)),
-                        global.WIDTH/global.HEIGHT
+                        mCamera.viewTransform(vec4In, vec4Out)
+                        ,global.WIDTH/global.HEIGHT
                     )
                 )
-        );
+            );
     }
 
     /*
     * takes an array of vec4 and transforms them through the pipeline
     * */
-    pipelineTransform(vec4Arr){
-        for(let i=0; i < vec4Arr.length; i++){
-            this.pipeline(vec4Arr[i]);
+    pipelineTransform(vec4ArrIn, vec4ArrOut){
+        for( let i=0; i < vec4ArrIn.length; i++ ){
+            this.pipeline( vec4ArrIn[i], vec4ArrOut[i] );
         }
     }
 
