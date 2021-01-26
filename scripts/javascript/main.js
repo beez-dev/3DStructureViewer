@@ -76,6 +76,8 @@ function main(){
                     mCtx.fillStyle = "#eeeeee";
                     mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
                     console.log("drawing");
+                    mCamera.P.z = Math.sin(xMan) * xManRadius;
+                    mCamera.P.x = Math.cos(xMan) * xManRadius;
                     xMan += 0.01;
 
                     mTransform.pipelineTransform(inputVertices, outputVertices);

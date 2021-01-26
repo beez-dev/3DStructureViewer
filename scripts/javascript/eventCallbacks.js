@@ -22,7 +22,7 @@ class EventCallback{
             }
 
 
-            camera.P.x += direction * this.cameraTranslateOffset;
+            // camera.P.x += direction * this.cameraTranslateOffset;
         }
 
     }

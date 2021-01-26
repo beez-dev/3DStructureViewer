@@ -15,11 +15,13 @@ class Camera{
 
         /*R is the right axis of the camera coordinate system*/
         this.R = TransformUtils.crossProduct(this.upVector, this.D);
+        TransformUtils.hNormalizeVec4(this.R);
         /*
         * U is the upAxis of the camera coordinate system
         * note, this is not the UpVector used to find the Up Axis via grahm-schmidt process
         * */
         this.U = TransformUtils.crossProduct(this.D, this.R);
+        TransformUtils.hNormalizeVec4(this.U);
     }
 
     getUpAxis(){
@@ -62,6 +64,13 @@ class CameraFlyStyle extends Camera{
 
         vec4Out.z = ((vec4In.x * this.D.x) + (vec4In.y * this.D.y) + (vec4In.z * this.D.z))
                     - ((this.D.x * this.P.x) + (this.D.y * this.P.y) + (this.D.z * this.P.z));
+
+        this.D = TransformUtils.subtract(this.P, this.target);
+        TransformUtils.hNormalizeVec4(this.D);
+        this.R = TransformUtils.crossProduct(this.upVector, this.D);
+        TransformUtils.hNormalizeVec4(this.R);
+        this.U = TransformUtils.crossProduct(this.D, this.R);
+        TransformUtils.hNormalizeVec4(this.U);
 
         return vec4Out;
     }
