@@ -3,8 +3,9 @@ import {MeshUtils} from "./utils/meshUtils.js";
 import {Vec2, Vec3, Vec4} from "./utils/mathObjects.js";
 import {Transformation} from "./transformation.js";
 import * as global from "./GLOBALs.js";
-import {mCamera} from "./GLOBALs.js";
+import {mTrackballCamera} from "./GLOBALs.js";
 import {EventCallback} from "./eventCallbacks.js";
+import {Transform} from "./utils/transformationUtils.js";
 
 function main(){
 
@@ -45,40 +46,43 @@ function main(){
                 let fvis = parser.getAllFvis(filename, objectName);
 
                 canvas.addEventListener("mousedown",function(event){
-                    callbacks.mouseDownHandler(event.clientX, event.clientY);
+                    callbacks.mouseDownHandler(event);
                 });
 
                 canvas.addEventListener("mouseup", function(event){
-                   callbacks.mouseUpHandler(event.clientX, event.clientY);
+                   callbacks.mouseUpHandler(event);
                 });
 
-                canvas.addEventListener('mousemove',
+                canvas.addEventListener("mousemove",
                     function(event){
-                        callbacks.cameraTranslate(mCamera, event.clientX, event.clientY);
+                        callbacks.mouseMoveHandler(event);
                     }.bind(this));
 
-                window.addEventListener("keydown",
+                canvas.addEventListener("mouseenter",
+            function(event){
+                    callbacks.mouseEnteredHandler(event);
+                });
+
+                canvas.addEventListener("mouseleave", function(event){
+                    callbacks.mouseLeaveHandler(event);
+                });
+
+                document.addEventListener("scroll",function(event){
+                        callbacks.scrollEventHandler(event);
+                    }
+                );
+
+                document.addEventListener("keypress",
                     function(event){
-                        if(event.code==='KeyW') {
-                            mCamera.P.z += .01;
-                        }else if(event.code === "KeyS"){
-                            mCamera.P.z -= .01;
-                        }else if(event.code === "KeyA"){
-                            mCamera.P.x += .01;
-                        }else if(event.code === "KeyD"){
-                            mCamera.P.x -= .01;
-                        }
+                        callbacks.keyPressHandler(event);
+
                     });
 
-                let xMan = 0.01;
-                let xManRadius = 10;
+
                 function drawLoop() {
                     mCtx.fillStyle = "#eeeeee";
                     mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
                     console.log("drawing");
-                    mCamera.P.z = Math.sin(xMan) * xManRadius;
-                    mCamera.P.x = Math.cos(xMan) * xManRadius;
-                    xMan += 0.01;
 
                     mTransform.pipelineTransform(inputVertices, outputVertices);
                     meshUtil.drawFaceStroke(mCtx, outputVertices, fvis);

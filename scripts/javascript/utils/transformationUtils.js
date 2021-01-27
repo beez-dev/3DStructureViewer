@@ -1,6 +1,6 @@
 import {Vec4} from "./mathObjects.js";
 
-class TransformUtils{
+class Transform {
     constructor(){
 
     }
@@ -84,4 +84,4 @@ class TransformUtils{
 
 }
 
-export {TransformUtils};
+export {Transform};

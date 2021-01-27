@@ -1,6 +1,6 @@
 import {Vec4} from "./utils/mathObjects.js";
 import * as global from "./GLOBALs.js";
-import {mCamera} from "./GLOBALs.js";
+import {mTrackballCamera, mPanCamera} from "./GLOBALs.js";
 
 
 class Transformation{
@@ -92,8 +92,9 @@ class Transformation{
         return this.screenTransform(
                  this.ndcTransform(
                     this.perspectiveProjection(
-                        mCamera.viewTransform(vec4In, vec4Out)
-                        ,global.WIDTH/global.HEIGHT
+                        mPanCamera.viewTransform(
+                            mTrackballCamera.viewTransform(vec4In, vec4Out), vec4Out),
+                            global.WIDTH/global.HEIGHT
                     )
                 )
             );
