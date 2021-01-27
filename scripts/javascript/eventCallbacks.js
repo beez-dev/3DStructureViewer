@@ -1,5 +1,5 @@
-import {mPanCamera, mTestPan, mTrackballCamera} from "./GLOBALs.js";
-import {Transform} from "./utils/transformationUtils.js";
+import {mModeler, mPanCamera, mScreenSpacePan, mTrackballCamera} from "./GLOBALs.js";
+import {TransformUtils} from "./utils/transformationUtils.js";
 import {Vec4} from "./utils/mathObjects.js";
 
 class EventCallback{
@@ -33,11 +33,19 @@ class EventCallback{
     }
 
     scrollEventHandler(event){
+
+        if(event.deltaY < 0){
+            mTrackballCamera.zoomOut();
+        }else{
+            mTrackballCamera.zoomIn();
+        }
+
+
     }
 
     mouseMoveHandler(event) {
         // console.log("mouse is moving...");
-        let speed = .07;
+        let speed = .15;
         let directionX = 1;
         let directionY = 1;
         let eventClientX = event.clientX;
@@ -54,27 +62,18 @@ class EventCallback{
 
         if (this.mouseDown) {
 
-            let cameraSpeed = 0.04;
             if(this.mouseDownButton === 0){
                 /*pan the model*/
-                mTestPan.moveHorizontal(directionX * Math.abs(this.mouseDownX - eventClientX));
-                mTestPan.moveVertical(directionY * Math.abs(this.mouseDownY - eventClientY));
+                mScreenSpacePan.moveHorizontal(directionX * Math.abs(this.mouseDownX - eventClientX));
+                mScreenSpacePan.moveVertical(directionY * Math.abs(this.mouseDownY - eventClientY));
 
             }
             else if(this.mouseDownButton === 1) {
                 /*rotate the model*/
-
-                console.log( "MMB clicked" );
-                console.log("MMB: position was: ", mTrackballCamera.P);
-                console.log("MMB: right vector was: ", mTrackballCamera.R);
-                console.log("MMB: direction was was: ", mTrackballCamera.D);
-                console.log("MMB: up vector was: ", mTrackballCamera.upVector);
-                console.log("MMB: up axis vector was: ", mTrackballCamera.U);
-
-                mTrackballCamera.setP(
-                    Transform.add( mTrackballCamera.P, mTrackballCamera.R  ) );
-
-
+                let scrollSpeedX = .01;
+                let scrollSpeedY = .0045;
+                mModeler.rotY(-directionX * scrollSpeedX *Math.abs(this.mouseDownX - eventClientX) );
+                mModeler.rotX(directionY * scrollSpeedY *Math.abs(this.mouseDownY - eventClientY) );
 
             }
         }

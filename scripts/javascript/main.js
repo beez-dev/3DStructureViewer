@@ -5,7 +5,7 @@ import {Transformation} from "./transformation.js";
 import * as global from "./GLOBALs.js";
 import {mTrackballCamera} from "./GLOBALs.js";
 import {EventCallback} from "./eventCallbacks.js";
-import {Transform} from "./utils/transformationUtils.js";
+import {TransformUtils} from "./utils/transformationUtils.js";
 
 function main(){
 
@@ -67,10 +67,11 @@ function main(){
                     callbacks.mouseLeaveHandler(event);
                 });
 
-                document.addEventListener("scroll",function(event){
-                        callbacks.scrollEventHandler(event);
-                    }
-                );
+                canvas.addEventListener('wheel',function(event){
+                    callbacks.scrollEventHandler(event)
+                    return false;
+                }, false
+                    );
 
                 document.addEventListener("keypress",
                     function(event){

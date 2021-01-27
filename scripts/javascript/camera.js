@@ -1,4 +1,4 @@
-import {Transform} from "./utils/transformationUtils.js";
+import {TransformUtils} from "./utils/transformationUtils.js";
 import {Vec4} from "./utils/mathObjects.js";
 
 class Camera{
@@ -9,6 +9,7 @@ class Camera{
         this.D = 0;
         this.R = 0;
         this.U = 0;
+        this.zoomTranslationFactor = .03;
         this.upVector = 0;
         this.buildLookAtVectors(vec4_position, vec4_target, vec4_upVector);
     }
@@ -18,20 +19,20 @@ class Camera{
         this.target = vec4_target;
 
         /*D is the direction axis: vector pointing towards the camera*/
-        this.D = Transform.subtract(this.P, this.target);
-        Transform.hNormalizeVec4(this.D);
+        this.D = TransformUtils.subtract(this.P, this.target);
+        TransformUtils.hNormalizeVec4(this.D);
 
         this.upVector = vec4_upVector;
 
         /*R is the right axis of the camera coordinate system*/
-        this.R = Transform.crossProduct(this.upVector, this.D);
-        Transform.hNormalizeVec4(this.R);
+        this.R = TransformUtils.crossProduct(this.upVector, this.D);
+        TransformUtils.hNormalizeVec4(this.R);
         /*
         * U is the upAxis of the camera coordinate system
         * note, this is not the UpVector used to find the Up Axis via grahm-schmidt process
         * */
-        this.U = Transform.crossProduct(this.D, this.R);
-        Transform.hNormalizeVec4(this.U);
+        this.U = TransformUtils.crossProduct(this.D, this.R);
+        TransformUtils.hNormalizeVec4(this.U);
     }
 
     /*set the camera position vector*/
@@ -46,14 +47,13 @@ class Camera{
     viewTransform(vec4In , vec4Out) {
 
         vec4Out.x = ((vec4In.x * this.R.x) + (vec4In.y * this.R.y) + (vec4In.z * this.R.z))
-            - ((this.R.x * this.P.x) + (this.R.y * this.P.y) + (this.R.z * this.P.z));
+                    - ((this.R.x * this.P.x) + (this.R.y * this.P.y) + (this.R.z * this.P.z));
 
         vec4Out.y = ((vec4In.x * this.U.x) + (vec4In.y * this.U.y) + (vec4In.z * this.U.z))
-            - ((this.U.x * this.P.x) + (this.U.y * this.P.y) + (this.U.z * this.P.z));
+                    - ((this.U.x * this.P.x) + (this.U.y * this.P.y) + (this.U.z * this.P.z));
 
         vec4Out.z = ((vec4In.x * this.D.x) + (vec4In.y * this.D.y) + (vec4In.z * this.D.z))
-            - ((this.D.x * this.P.x) + (this.D.y * this.P.y) + (this.D.z * this.P.z));
-
+                    - ((this.D.x * this.P.x) + (this.D.y * this.P.y) + (this.D.z * this.P.z));
 
         return vec4Out;
     }
@@ -70,13 +70,14 @@ class Camera{
         return this.D;
     }
 
-    translateUp(factor){
-        Transform.addAccumulate(this.P, factor*this.U);
+    zoomOut(){
+        this.P.z -= this.zoomTranslationFactor;
     }
 
-    translateRight(factor){
-
+    zoomIn(){
+        this.P.z += this.zoomTranslationFactor;
     }
+
 }
 
 
@@ -94,7 +95,7 @@ class Pan extends Camera{
 
 }
 
-class TestPan{
+class Panner {
     constructor() {
         this.x = 0;
         this.y = 0;
@@ -103,9 +104,10 @@ class TestPan{
 
 
     pan(vec4){
-        vec4.x += this.x;
-        vec4.y += this.y;
-        vec4.z += this.z;
+        vec4.x -= this.x * .005;
+        vec4.y -= this.y * .005;
+        vec4.z -= this.z * .005;
+        return vec4;
     }
 
     moveHorizontal(factor){
@@ -119,4 +121,4 @@ class TestPan{
 
 }
 
-export {Trackball, Pan, TestPan};
+export {Trackball, Pan, Panner};

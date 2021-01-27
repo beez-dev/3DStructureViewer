@@ -1,7 +1,7 @@
 import {Vec4} from "./utils/mathObjects.js";
 import * as global from "./GLOBALs.js";
-import {mTrackballCamera, mPanCamera} from "./GLOBALs.js";
-import {mTestPan} from "./GLOBALs.js";
+import {mTrackballCamera, mPanCamera, mModeler} from "./GLOBALs.js";
+import {mScreenSpacePan} from "./GLOBALs.js";
 
 
 class Transformation{
@@ -84,6 +84,10 @@ class Transformation{
         return vec4;
     }
 
+    rotate(vec4){
+
+    }
+
 
 
     /*
@@ -92,15 +96,16 @@ class Transformation{
     * vec4 come from the model space
     * */
     pipeline(vec4In, vec4Out){
-        return mTestPan.pan(this.screenTransform(
-                 this.ndcTransform(
-                    this.perspectiveProjection(
-                            mTrackballCamera.viewTransform(vec4In, vec4Out),
-                            global.WIDTH/global.HEIGHT
-                    )
-                )
-            )
-        );
+        return this.screenTransform(
+                         this.ndcTransform(
+                            this.perspectiveProjection(
+                                mScreenSpacePan.pan(
+                                    mTrackballCamera.viewTransform(
+                                        mModeler.modelTransform(vec4In, vec4Out), vec4Out) ),
+                                    global.WIDTH/global.HEIGHT
+                            )
+                        )
+                );
     }
 
     /*
@@ -114,5 +119,48 @@ class Transformation{
 
 }
 
+class ModelTransformations{
 
-export {Transformation};
+    constructor(){
+        this.yRotation = 0;
+        this.xRotation = 0;
+    }
+
+    rotateY(vec4In, vec4Out){
+        vec4Out.x = (Math.cos(this.yRotation) * vec4In.x) + (Math.sin(this.yRotation) * vec4In.z);
+        vec4Out.y = vec4In.y
+        vec4Out.z = (vec4In.x * (-Math.sin(this.yRotation))) + (Math.cos(this.yRotation) * vec4In.z);
+        return vec4Out;
+    }
+
+    /*
+    * accumulates the rotation in the input vector object
+    * */
+    rotateXAccumulate(vec4In) {
+        /*x axis remains unchanged*/
+        vec4In.y = (Math.cos(this.xRotation) * vec4In.y) - (Math.sin(this.xRotation) * vec4In.z);
+        vec4In.z = (Math.sin(this.xRotation) * vec4In.y) + (Math.cos(this.xRotation) * vec4In.z);
+        return vec4In;
+    }
+
+    /*
+    * rotateY affector function
+    * */
+    rotY(fac){
+        this.yRotation += fac;
+    }
+
+    rotX(fac){
+        this.xRotation += fac;
+    }
+
+    modelTransform(vec4In, vec4Out){
+        return this.rotateXAccumulate(
+            this.rotateY(vec4In, vec4Out) );
+    }
+
+}
+
+
+
+export {Transformation, ModelTransformations};
