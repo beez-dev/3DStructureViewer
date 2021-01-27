@@ -1,11 +1,11 @@
-import {Trackball, Pan} from "./camera.js";
+import {Trackball, Pan, TestPan} from "./camera.js";
 import {Vec4} from "./utils/mathObjects.js";
 
 var WIDTH = document.documentElement.clientWidth;
 var HEIGHT = document.documentElement.clientHeight;
 
 const mTrackballCamera = new Trackball(
-    new Vec4(0,0,3), new Vec4(0,0,0),new Vec4(0,1,0)
+    new Vec4(0,0,3), new Vec4( 0,0,-777 ),new Vec4(0,1,0)
     );
 
 const mPanCamera = new Pan(
@@ -13,4 +13,6 @@ const mPanCamera = new Pan(
 );
 
 
-export {HEIGHT, WIDTH, mTrackballCamera, mPanCamera};
+const mTestPan = new TestPan();
+
+export {HEIGHT, WIDTH, mTrackballCamera, mPanCamera, mTestPan};

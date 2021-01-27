@@ -1,6 +1,7 @@
 import {Vec4} from "./utils/mathObjects.js";
 import * as global from "./GLOBALs.js";
 import {mTrackballCamera, mPanCamera} from "./GLOBALs.js";
+import {mTestPan} from "./GLOBALs.js";
 
 
 class Transformation{
@@ -83,21 +84,23 @@ class Transformation{
         return vec4;
     }
 
+
+
     /*
     * takes in a vec4 object and
     * transforms it through the rendering pipeline;
     * vec4 come from the model space
     * */
     pipeline(vec4In, vec4Out){
-        return this.screenTransform(
+        return mTestPan.pan(this.screenTransform(
                  this.ndcTransform(
                     this.perspectiveProjection(
-                        mPanCamera.viewTransform(
-                            mTrackballCamera.viewTransform(vec4In, vec4Out), vec4Out),
+                            mTrackballCamera.viewTransform(vec4In, vec4Out),
                             global.WIDTH/global.HEIGHT
                     )
                 )
-            );
+            )
+        );
     }
 
     /*

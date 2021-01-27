@@ -1,4 +1,4 @@
-import {mPanCamera, mTrackballCamera} from "./GLOBALs.js";
+import {mPanCamera, mTestPan, mTrackballCamera} from "./GLOBALs.js";
 import {Transform} from "./utils/transformationUtils.js";
 import {Vec4} from "./utils/mathObjects.js";
 
@@ -50,44 +50,38 @@ class EventCallback{
         if(eventClientY < this.mouseDownY){
             directionY = -directionY;
         }
-        this.mouseDownY = event.clientY;
-        this.mouseDownX = event.clientX
 
 
         if (this.mouseDown) {
 
-
+            let cameraSpeed = 0.04;
             if(this.mouseDownButton === 0){
                 /*pan the model*/
-                console.log( "Button zero was pressed, ",this.mouseDownButton);
-                mPanCamera.setP(
-                    Transform.add(mPanCamera.P, Transform.scale(directionY * speed, mPanCamera.U)) );
-                mPanCamera.setP(
-                    Transform.add(mPanCamera.P, Transform.scale(directionX * speed, mPanCamera.R)) );
+                mTestPan.moveHorizontal(directionX * Math.abs(this.mouseDownX - eventClientX));
+                mTestPan.moveVertical(directionY * Math.abs(this.mouseDownY - eventClientY));
 
-                mPanCamera.buildLookAtVectors(
-                    mPanCamera.P,
-                    Transform.add( mPanCamera.P, new Vec4(0,0,-1) ),
-                    new Vec4(0,1,0)
-                );
-
-            }else if(this.mouseDownButton === 1) {
+            }
+            else if(this.mouseDownButton === 1) {
                 /*rotate the model*/
 
-                console.log( "Button one was pressed, ", this.mouseDownButton );
+                console.log( "MMB clicked" );
+                console.log("MMB: position was: ", mTrackballCamera.P);
+                console.log("MMB: right vector was: ", mTrackballCamera.R);
+                console.log("MMB: direction was was: ", mTrackballCamera.D);
+                console.log("MMB: up vector was: ", mTrackballCamera.upVector);
+                console.log("MMB: up axis vector was: ", mTrackballCamera.U);
+
                 mTrackballCamera.setP(
-                    Transform.add(mTrackballCamera.P, Transform.scale(directionY * speed, mTrackballCamera.U)) );
-                mTrackballCamera.setP(
-                    Transform.add(mTrackballCamera.P, Transform.scale(directionX * speed, mTrackballCamera.R)) );
+                    Transform.add( mTrackballCamera.P, mTrackballCamera.R  ) );
 
 
-                mTrackballCamera.buildLookAtVectors(
-                    mTrackballCamera.P,
-                    new Vec4(0,0,0),
-                    new Vec4(0,1,0)
-                );
+
             }
         }
+
+        this.mouseDownY = event.clientY;
+        this.mouseDownX = event.clientX
+
     }
 
     mouseDownHandler(event){

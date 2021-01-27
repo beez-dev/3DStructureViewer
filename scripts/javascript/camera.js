@@ -54,7 +54,6 @@ class Camera{
         vec4Out.z = ((vec4In.x * this.D.x) + (vec4In.y * this.D.y) + (vec4In.z * this.D.z))
             - ((this.D.x * this.P.x) + (this.D.y * this.P.y) + (this.D.z * this.P.z));
 
-        this.buildLookAtVectors(this.P,this.target, this.upVector);
 
         return vec4Out;
     }
@@ -95,4 +94,29 @@ class Pan extends Camera{
 
 }
 
-export {Trackball, Pan};
+class TestPan{
+    constructor() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
+
+    pan(vec4){
+        vec4.x += this.x;
+        vec4.y += this.y;
+        vec4.z += this.z;
+    }
+
+    moveHorizontal(factor){
+        this.x += factor;
+    }
+
+    moveVertical(factor){
+        this.y += factor;
+    }
+
+
+}
+
+export {Trackball, Pan, TestPan};
