@@ -1,7 +1,7 @@
 import {Vec4} from "./utils/mathObjects.js";
 import * as global from "./GLOBALs.js";
 import {mTrackballCamera, mPanCamera, mModeler} from "./GLOBALs.js";
-import {mScreenSpacePan} from "./GLOBALs.js";
+import {mPanner} from "./GLOBALs.js";
 
 
 class Transformation{
@@ -99,13 +99,13 @@ class Transformation{
         return this.screenTransform(
                          this.ndcTransform(
                             this.perspectiveProjection(
-                                mScreenSpacePan.pan(
+                                mPanner.pan(
                                     mTrackballCamera.viewTransform(
                                         mModeler.modelTransform(vec4In, vec4Out), vec4Out) ),
                                     global.WIDTH/global.HEIGHT
-                            )
-                        )
-                );
+                                    )
+                                )
+                            );
     }
 
     /*
@@ -118,6 +118,7 @@ class Transformation{
     }
 
 }
+
 
 class ModelTransformations{
 
@@ -154,6 +155,7 @@ class ModelTransformations{
         this.xRotation += fac;
     }
 
+    /* model space transformations */
     modelTransform(vec4In, vec4Out){
         return this.rotateXAccumulate(
             this.rotateY(vec4In, vec4Out) );

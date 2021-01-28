@@ -2,15 +2,24 @@ import {TransformUtils} from "./utils/transformationUtils.js";
 import {Vec4} from "./utils/mathObjects.js";
 
 class Camera{
-    constructor(vec4_position, vec4_target, vec4_upVector) {
+    constructor(vec4_position = new Vec4(0,0,3),
+                vec4_target = new Vec4( 0,0,0 ),
+                vec4_upVector = new Vec4(0,1,0)) {
         /* P is the position of the camera in world space */
-        this.P =0;
-        this.target = 0;
-        this.D = 0;
-        this.R = 0;
-        this.U = 0;
+
+        this.P        = vec4_position;
+        this.target   = vec4_target;
+        this.upVector = vec4_upVector;
+        /*D is the direction axis: vector pointing towards the camera*/
+        this.D        = 0;
+        /*R is the right axis of the camera coordinate system*/
+        this.R        = 0;
+        /*
+        *  U is the upAxis of the camera coordinate system
+        *  note, this is not the UpVector used to find the Up Axis via grahm-schmidt process
+        * */
+        this.U        = 0;
         this.zoomTranslationFactor = .03;
-        this.upVector = 0;
         this.buildLookAtVectors(vec4_position, vec4_target, vec4_upVector);
     }
 
@@ -18,19 +27,14 @@ class Camera{
         this.P = vec4_position;
         this.target = vec4_target;
 
-        /*D is the direction axis: vector pointing towards the camera*/
         this.D = TransformUtils.subtract(this.P, this.target);
         TransformUtils.hNormalizeVec4(this.D);
 
         this.upVector = vec4_upVector;
 
-        /*R is the right axis of the camera coordinate system*/
         this.R = TransformUtils.crossProduct(this.upVector, this.D);
         TransformUtils.hNormalizeVec4(this.R);
-        /*
-        * U is the upAxis of the camera coordinate system
-        * note, this is not the UpVector used to find the Up Axis via grahm-schmidt process
-        * */
+
         this.U = TransformUtils.crossProduct(this.D, this.R);
         TransformUtils.hNormalizeVec4(this.U);
     }
@@ -43,7 +47,9 @@ class Camera{
     }
 
 
-    /*default FPS style navigation */
+    /*
+    * lookAt matrix transformation for the
+    * default FPS style navigation */
     viewTransform(vec4In , vec4Out) {
 
         vec4Out.x = ((vec4In.x * this.R.x) + (vec4In.y * this.R.y) + (vec4In.z * this.R.z))
@@ -58,15 +64,16 @@ class Camera{
         return vec4Out;
     }
 
-    getUpAxis(){
+    /*get the up axis vector, different from the up vector*/
+    getUpAxisVector(){
         return this.U;
     }
 
-    getRightAxis(){
+    getRightVector(){
         return this.R;
     }
 
-    getDirectionAxis(){
+    getDirectionVector(){
         return this.D;
     }
 

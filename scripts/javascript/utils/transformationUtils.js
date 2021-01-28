@@ -17,6 +17,14 @@ class TransformUtils {
         );
     }
 
+    /*returns rVec4 =  aVec4(x)bVec4 :: the cross product*/
+    static crossProductAccumulate(rVec4, aVec4, bVec4) {
+        rVec4.x = (aVec4.y * bVec4.z) - (aVec4.z * bVec4.y),
+        rVec4.y = (aVec4.z * bVec4.x) - (aVec4.x * bVec4.z),
+        rVec4.z = (aVec4.x * bVec4.y) - (aVec4.y * bVec4.x);
+        return rVec4;
+    }
+
     /*
     * takes two vec4 vectors and returns the cross product;
     * only x, y, and z coordinates are taken account, the w coord is ignored
@@ -36,6 +44,14 @@ class TransformUtils {
             (aVec4.y - bVec4.y),
             (aVec4.z - bVec4.z)
         );
+    }
+
+    /*return rVec4 = aVec4 (-) bVec4 */
+    static subtractAccumulate(rVec4, aVec4, bVec4) {
+        rVec4.x = (aVec4.x - bVec4.x);
+        rVec4.y = (aVec4.y - bVec4.y);
+        rVec4.z = (aVec4.z - bVec4.z);
+        return rVec4;
     }
 
 

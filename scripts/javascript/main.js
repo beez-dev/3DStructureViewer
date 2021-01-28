@@ -7,6 +7,7 @@ import {mTrackballCamera} from "./GLOBALs.js";
 import {EventCallback} from "./eventCallbacks.js";
 import {TransformUtils} from "./utils/transformationUtils.js";
 
+
 function main(){
 
     let canvas = document.querySelector('canvas');
@@ -28,7 +29,6 @@ function main(){
     let parser = null;
 
 
-
     input.addEventListener('change', function (e) {
         mCtx.clearRect(0,0,width,height);
         parser = new ObjParser(e.target,
@@ -43,7 +43,10 @@ function main(){
                 for (let i = 0; i < inputVertices.length; i++) {
                     outputVertices[i] = new Vec4();
                 }
+                /*each fvi subarray is of length atleast 3 - guaranteed*/
                 let fvis = parser.getAllFvis(filename, objectName);
+
+
 
                 canvas.addEventListener("mousedown",function(event){
                     callbacks.mouseDownHandler(event);
@@ -76,17 +79,17 @@ function main(){
                 document.addEventListener("keypress",
                     function(event){
                         callbacks.keyPressHandler(event);
-
-                    });
+                    } );
 
 
                 function drawLoop() {
                     mCtx.fillStyle = "#eeeeee";
                     mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
                     console.log("drawing");
-
+                    mCtx.fillStyle = "#ee0000";
+                    mCtx.strokeStyle = "#393939";
                     mTransform.pipelineTransform(inputVertices, outputVertices);
-                    meshUtil.drawFaceStroke(mCtx, outputVertices, fvis);
+                    meshUtil.drawWithBackfaceCulling(mCtx, outputVertices, fvis);
 
                     requestAnimationFrame(drawLoop);
                 }

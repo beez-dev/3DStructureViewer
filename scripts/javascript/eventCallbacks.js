@@ -1,4 +1,4 @@
-import {mModeler, mPanCamera, mScreenSpacePan, mTrackballCamera} from "./GLOBALs.js";
+import {mModeler, mPanCamera, mPanner, mTrackballCamera} from "./GLOBALs.js";
 import {TransformUtils} from "./utils/transformationUtils.js";
 import {Vec4} from "./utils/mathObjects.js";
 
@@ -64,8 +64,8 @@ class EventCallback{
 
             if(this.mouseDownButton === 0){
                 /*pan the model*/
-                mScreenSpacePan.moveHorizontal(directionX * Math.abs(this.mouseDownX - eventClientX));
-                mScreenSpacePan.moveVertical(directionY * Math.abs(this.mouseDownY - eventClientY));
+                mPanner.moveHorizontal(directionX * Math.abs(this.mouseDownX - eventClientX));
+                mPanner.moveVertical(directionY * Math.abs(this.mouseDownY - eventClientY));
 
             }
             else if(this.mouseDownButton === 1) {
@@ -74,7 +74,6 @@ class EventCallback{
                 let scrollSpeedY = .0045;
                 mModeler.rotY(-directionX * scrollSpeedX *Math.abs(this.mouseDownX - eventClientX) );
                 mModeler.rotX(directionY * scrollSpeedY *Math.abs(this.mouseDownY - eventClientY) );
-
             }
         }
 
