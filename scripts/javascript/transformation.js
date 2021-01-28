@@ -95,27 +95,29 @@ class Transformation{
     * transforms it through the rendering pipeline;
     * vec4 come from the model space
     * */
-    pipeline(vec4In, vec4Out){
+    pipeline(vec4In, vec4Out) {
         return this.screenTransform(
-                         this.ndcTransform(
-                            this.perspectiveProjection(
-                                mPanner.pan(
-                                    mTrackballCamera.viewTransform(
-                                        mModeler.modelTransform(vec4In, vec4Out), vec4Out) ),
-                                    global.WIDTH/global.HEIGHT
-                                    )
-                                )
-                            );
+            this.ndcTransform(
+                this.perspectiveProjection(
+                    mPanner.pan(
+                        mTrackballCamera.viewTransform(
+                            mModeler.modelTransform(vec4In, vec4Out), vec4Out) ),
+                    global.WIDTH / global.HEIGHT
+                )
+            )
+        );
     }
+
 
     /*
     * takes an array of vec4 and transforms them through the pipeline
     * */
-    pipelineTransform(vec4ArrIn, vec4ArrOut){
-        for( let i=0; i < vec4ArrIn.length; i++ ){
-            this.pipeline( vec4ArrIn[i], vec4ArrOut[i] );
+    pipelineTransform(vec4ArrIn, vec4ArrOut) {
+        for (let i = 0; i < vec4ArrIn.length; i++) {
+            this.pipeline(vec4ArrIn[i], vec4ArrOut[i]);
         }
     }
+
 
 }
 

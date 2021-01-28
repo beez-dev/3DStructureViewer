@@ -79,8 +79,7 @@ function main(){
                 document.addEventListener("keypress",
                     function(event){
                         callbacks.keyPressHandler(event);
-                    } );
-
+                    });
 
                 function drawLoop() {
                     mCtx.fillStyle = "#eeeeee";

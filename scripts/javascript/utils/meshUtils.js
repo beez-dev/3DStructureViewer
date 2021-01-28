@@ -82,6 +82,7 @@ class MeshUtils{
             function(fvi){
                 if(this.backfaceCulling(vertices, fvi )) {
                     this.drawFace(ctx, vertices, fvi);
+                    ctx.globalCompositeOperation="copy";
                     ctx.closePath();
                     ctx.stroke();
                     ctx.fill();
