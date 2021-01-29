@@ -98,6 +98,13 @@ class TransformUtils {
       return vec4;
     }
 
+    static copy(vec4a, vec4b){
+        vec4a.x = vec4b.x;
+        vec4a.y = vec4b.y;
+        vec4a.z = vec4b.z;
+        return vec4a;
+    }
+
 }
 
 export {TransformUtils};
