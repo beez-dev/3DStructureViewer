@@ -64,11 +64,12 @@ class MeshUtils{
         ctx.fill();
     }
 
-    /* backface detection algorithm */
+    /* backface detection algorithm
+    * return value: false- don't draw; true- draw*/
     backfaceCulling(vertices, fvi) {
 
         // fvi is guaranteed to be of atleast 3 length, so no index is out of bounds
-        this.vertexHolder0 = vertices[fvi[0]]; //start vertex- vertex from which drawing of a face is saved
+        this.vertexHolder0 = vertices[fvi[0]]; //start vertex- vertex from which drawing of a face starts
         this.vertexHolder1 = vertices[fvi[1]]; //second face vertex
         this.vertexHolder2 = vertices[fvi[2]]; //third face vertex
 
@@ -92,36 +93,43 @@ class MeshUtils{
             return false;
         }
         return true;
-
     }
 
-    drawWithBackfaceCulling(ctx, vertices, fvis){
+
+    drawWithBackfaceCulling(ctx, outputVertices, fvis){
         fvis.forEach(
             function(fvi){
-                if(this.backfaceCulling(vertices, fvi )) {
-                    this.drawFace(ctx, vertices, fvi);
-                    ctx.globalCompositeOperation="source-over";
-                    ctx.closePath();
-                    ctx.stroke();
-                    ctx.fill();
-                }
+                this.drawWithBackfaceCullingIndivFvi(ctx,outputVertices, fvi);
             }.bind(this)
         );
     }
 
 
-    /*painter's algorithm*/
-    drawFaceWithZOrder(ctx, outputVertices, faces) {
+    /* backface culling taking individual fvi as input */
+    drawWithBackfaceCullingIndivFvi(ctx, outputVertices, fvi){
+        if(this.backfaceCulling(outputVertices, fvi )) {
+            this.drawFace(ctx, outputVertices, fvi);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fill();
+            return true;
+        }
+        return false;
+    }
 
+    /* painter's algorithm */
+    drawFaceWithZOrder(ctx, outputVertices, faces) {
        faces.sort( (a, b) => a.zIndexViewSpace > b.zIndexViewSpace ? 1: -1 );
 
        faces.forEach(
-            function(face){
+            function( face ) {
                 this.drawFaceFillStrokeIndiv(ctx, outputVertices, face.fvi);
-            }.bind(this)
-        )
+            }.bind( this )
+       );
 
     }
+
+
 }
 
 class Face{

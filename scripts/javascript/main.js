@@ -52,9 +52,9 @@ function main(){
                 let fvis = parser.getAllFvis(filename, objectName);
                 let faces = new Array(fvis.length);
 
-                console.log( "fvis: ", fvis );
+                /*console.log( "fvis: ", fvis );
                 console.log( "faces: ", faces );
-                console.log( "viewCoordCaptures: ", viewCoordCaptures );
+                console.log( "viewCoordCaptures: ", viewCoordCaptures );*/
 
 
                 for( let i=0; i < fvis.length; i++ ){
@@ -76,55 +76,65 @@ function main(){
                     }
                 }*/
 
-                canvas.addEventListener("mousedown", function (event) {
-                    callbacks.mouseDownHandler(event);
+                canvas.addEventListener("mousedown",
+            function (event) {
+                        forceRedraw();
+                        callbacks.mouseDownHandler(event);
                 });
 
-                canvas.addEventListener("mouseup", function (event) {
-                    callbacks.mouseUpHandler(event);
+                canvas.addEventListener("mouseup",
+            function (event) {
+                        forceRedraw();
+                        callbacks.mouseUpHandler(event);
                 });
 
                 canvas.addEventListener("mousemove",
                     function (event) {
+                        forceRedraw();
                         callbacks.mouseMoveHandler(event);
                     }.bind(this));
 
                 canvas.addEventListener("mouseenter",
                     function (event) {
+                        forceRedraw();
                         callbacks.mouseEnteredHandler(event);
                     });
 
                 canvas.addEventListener("mouseleave", function (event) {
+                    forceRedraw();
                     callbacks.mouseLeaveHandler(event);
                 });
 
                 canvas.addEventListener('wheel', function (event) {
-                        callbacks.scrollEventHandler(event)
+                        forceRedraw();
+                        callbacks.scrollEventHandler(event);
                         return false;
                     }, false
                 );
 
                 document.addEventListener("keypress",
                     function (event) {
+                        forceRedraw();
                         callbacks.keyPressHandler(event);
                     });
 
 
+                function forceRedraw(){
+                    FZIindicator.enableRedraw();
+                    drawLoop();
+                }
+
 
                 function drawLoop() {
-
-                    mCtx.fillStyle = "#eeeeee";
-                    mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
-                    console.log("drawing");
-                    mCtx.fillStyle = "#ee0000";
-                    mCtx.strokeStyle = "#393939";
-                    mTransform.pipelineTransform(inputVertices, outputVertices, viewCoordCaptures);
-
-                    if(FZIindicator.redraw){
+                    if(FZIindicator.redraw) {
+                        mCtx.fillStyle = "#eeeeee";
+                        mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
+                        mCtx.fillStyle = "#ee0000";
+                        mCtx.strokeStyle = "#393939";
+                        mTransform.pipelineTransform(inputVertices, outputVertices, viewCoordCaptures);
 
                         meshUtil.drawFaceWithZOrder(mCtx, outputVertices, faces);
-                        console.log( "faces are: ", faces );
-                        // FZIindicator.disableRedraw(); /*disable redraw after one full cycle*/
+                        FZIindicator.disableRedraw(); /*disable redraw after one full cycle*/
                     }
 
                     requestAnimationFrame(drawLoop);
@@ -135,6 +145,8 @@ function main(){
             }
         );
     });
+
+
 
 
 }
