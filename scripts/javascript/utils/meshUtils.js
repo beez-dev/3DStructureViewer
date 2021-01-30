@@ -111,11 +111,45 @@ class MeshUtils{
 
 
     /*painter's algorithm*/
-    drawFaceWithFZI(ctx, vertices, fvis, fzis) {
-        fzis.forEach( function(fzi){
-            this.drawFaceFillStrokeIndiv(ctx, vertices, fvis[fzi.fIndex] );
-        }.bind(this) );
+    drawFaceWithZOrder(ctx, outputVertices, faces) {
+
+       faces.sort( (a, b) => a.zIndexViewSpace > b.zIndexViewSpace ? 1: -1 );
+
+       faces.forEach(
+            function(face){
+                this.drawFaceFillStrokeIndiv(ctx, outputVertices, face.fvi);
+            }.bind(this)
+        )
+
     }
 }
 
-export {MeshUtils};
+class Face{
+    constructor(fvi=[]){
+        this.faceFVI = fvi;
+        this.viewSpaceVertices = [];
+    }
+
+    get zIndexViewSpace() {
+        /*depth index approximation of a face*/
+        let zCoordMax = this.viewSpaceVertices[0].z;
+        for(let i = 1; i < this.viewSpaceVertices.length;i++){
+            if(this.viewSpaceVertices[i].z > zCoordMax){
+                zCoordMax = this.viewSpaceVertices[i].z;
+            }
+        }
+        return zCoordMax;
+    }
+
+    get fvi(){
+        return this.faceFVI;
+    }
+
+    set fvi(fvi){
+        this.faceFVI = fvi;
+    }
+
+
+}
+
+export { MeshUtils, Face };

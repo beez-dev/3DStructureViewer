@@ -112,36 +112,14 @@ class Transformation {
     * captureBuffer is used to capture view space coordinates.
     * */
 
-    pipelineTransform(vec4ArrIn, vec4ArrOut, fvis, fzis, captureBuffer) {
-
+    pipelineTransform(vec4ArrIn, vec4ArrOut, captureBuffer) {
         for (let i = 0; i < vec4ArrIn.length; i++) {
             this.pipeline(vec4ArrIn[i], vec4ArrOut[i], captureBuffer, i);
         }
 
         /* view space coordinates have been captured at this point */
         /* proceed with face index sorting */
-
-
         /*TODO - user event optimization can be done here*/
-        let tempMax = 0;
-        let fviVertexValue = 0;
-        let fvi = []; /*current fvi*/
-
-        for (let k = 0; k < fvis.length; k++) {
-
-            fvi = fvis[k];
-            tempMax = captureBuffer[fvi[0]].z;
-            for (let i = 1; i < fvi.length; i++) {/*fi is */
-                fviVertexValue = captureBuffer[fvi[i]].z;
-                /* get the maximum z-value of vertices making the face */
-                tempMax = (tempMax > fviVertexValue) ? tempMax : fviVertexValue;
-            }
-
-            fzis[ k ].zIndex = tempMax;
-        }
-
-        /*face zIndex sort*/
-        fzis.sort( (a, b) => a.zIndex > b.zIndex ? 1 : -1 );
 
 
     }

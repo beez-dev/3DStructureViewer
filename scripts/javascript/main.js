@@ -1,12 +1,13 @@
-import {ObjParser} from "./ObjParser.js";
-import {MeshUtils} from "./utils/meshUtils.js";
-import {Vec2, Vec3, Vec4} from "./utils/mathObjects.js";
-import {Transformation} from "./transformation.js";
 import * as global from "./GLOBALs.js";
-import {FZIindicator, mTrackballCamera} from "./GLOBALs.js";
-import {EventCallback} from "./eventCallbacks.js";
-import {TransformUtils} from "./utils/transformationUtils.js";
 import {FZI} from "./zIndexSorting.js";
+import {ObjParser} from "./ObjParser.js";
+import {EventCallback} from "./eventCallbacks.js";
+import {Transformation} from "./transformation.js";
+import {Face, MeshUtils} from "./utils/meshUtils.js";
+import {Vec2, Vec3, Vec4} from "./utils/mathObjects.js";
+import {FZIindicator, mTrackballCamera} from "./GLOBALs.js";
+import {TransformUtils} from "./utils/transformationUtils.js";
+
 
 
 function main(){
@@ -32,8 +33,8 @@ function main(){
 
     input.addEventListener('change', function (e) {
         mCtx.clearRect(0,0,width,height);
-        parser = new ObjParser(e.target,
-            function () {
+        parser = new ObjParser( e.target,
+            function wholeDraw() {
                 let filename = parser.getAvailableFileNames(); /*single file support only*/
                 let objectName = parser.getAvailableObjectNames(filename);
                 /*model space vertices of the object
@@ -46,15 +47,34 @@ function main(){
                     outputVertices[i] = new Vec4();
                     viewCoordCaptures[i] = new Vec4();
                 }
-                /*each fvi subarray is of length atleast 3 - guaranteed*/
-                let fvis = parser.getAllFvis(filename, objectName);
 
-                /*fzi- face to zIndex mapper, see zIndexSorting.js */
-                let fzis = new Array(fvis.length);
-                for(let i = 0; i < fvis.length; i++){
-                    fzis[i] = new FZI();
+                // /!*each fvi subarray is of length atleast 3 - guaranteed*!/
+                let fvis = parser.getAllFvis(filename, objectName);
+                let faces = new Array(fvis.length);
+
+                console.log( "fvis: ", fvis );
+                console.log( "faces: ", faces );
+                console.log( "viewCoordCaptures: ", viewCoordCaptures );
+
+
+                for( let i=0; i < fvis.length; i++ ){
+                    faces[ i ] = new Face(fvis[i]);
+                    let eachFvi = fvis[ i ];
+                    for(let j = 0; j < eachFvi.length; j++) {
+                         /*stick the references of view space vertices
+                         to in their face objects*/
+                         faces[i].viewSpaceVertices.push( viewCoordCaptures[ eachFvi[j] ] );
+                    }
                 }
 
+                /*for(let i=0; i < faces.length; i++){
+                    let eachFace = faces[i];
+                    for(let j = 0; j < eachFace.viewSpaceVertices.length; j++){
+                        let eachVertex = eachFace.viewSpaceVertices[j];
+                        let eachViewSpaceVertex = viewCoordCaptures[ eachFace.fvi[j] ];
+                        console.log(eachVertex == eachViewSpaceVertex);
+                    }
+                }*/
 
                 canvas.addEventListener("mousedown", function (event) {
                     callbacks.mouseDownHandler(event);
@@ -91,27 +111,26 @@ function main(){
 
 
 
-
-
-                setInterval(
                 function drawLoop() {
+
                     mCtx.fillStyle = "#eeeeee";
                     mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
                     console.log("drawing");
                     mCtx.fillStyle = "#ee0000";
                     mCtx.strokeStyle = "#393939";
-                    mTransform.pipelineTransform(inputVertices, outputVertices, fvis, fzis, viewCoordCaptures);
-
-                    // meshUtil.drawWithBackfaceCulling(mCtx, outputVertices, fvis);
-                    // meshUtil.drawFaceFillStroke(mCtx,outputVertices,fvis);
+                    mTransform.pipelineTransform(inputVertices, outputVertices, viewCoordCaptures);
 
                     if(FZIindicator.redraw){
-                        meshUtil.drawFaceWithFZI(mCtx, outputVertices, fvis, fzis);
+
+                        meshUtil.drawFaceWithZOrder(mCtx, outputVertices, faces);
+                        console.log( "faces are: ", faces );
                         // FZIindicator.disableRedraw(); /*disable redraw after one full cycle*/
                     }
-                }, 5000);
 
-                // drawLoop();
+                    requestAnimationFrame(drawLoop);
+                }
+
+                drawLoop();
 
             }
         );

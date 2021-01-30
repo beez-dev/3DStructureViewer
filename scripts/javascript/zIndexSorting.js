@@ -15,7 +15,9 @@ class ZIndexFilter {
     *
     * captureBuffer must be an array of vec4s */
     capture(captureBuffer, vec4, bufferPosition){
-        TransformUtils.copy(captureBuffer[bufferPosition], vec4);
+        captureBuffer[bufferPosition].x = vec4.x;
+        captureBuffer[bufferPosition].y = vec4.y;
+        captureBuffer[bufferPosition].z = vec4.z;
         return vec4;
     }
 }

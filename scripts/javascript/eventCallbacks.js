@@ -73,7 +73,7 @@ class EventCallback{
                 let scrollSpeedX = .01;
                 let scrollSpeedY = .0045;
                 mModeler.rotY(-directionX * scrollSpeedX *Math.abs(this.mouseDownX - eventClientX) );
-                mModeler.rotX(directionY * scrollSpeedY *Math.abs(this.mouseDownY - eventClientY) );
+                mModeler.rotX( directionY * scrollSpeedY *Math.abs(this.mouseDownY - eventClientY) );
             }
         }
 
