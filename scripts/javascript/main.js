@@ -5,7 +5,7 @@ import {EventCallback} from "./eventCallbacks.js";
 import {Transformation} from "./transformation.js";
 import {Face, MeshUtils} from "./utils/meshUtils.js";
 import {Vec2, Vec3, Vec4} from "./utils/mathObjects.js";
-import {FZIindicator, mTrackballCamera} from "./init.js";
+import {State, mTrackballCamera} from "./init.js";
 import {TransformUtils} from "./utils/transformationUtils.js";
 
 
@@ -117,7 +117,7 @@ function main(){
                         callbacks.keyPressHandler(event);
                     });
 
-                document.getElementsByClassName('rotateModel')[0].addEventListener("click",
+                document.getElementsByClassName('bottomItemContainer')[0].addEventListener("click",
                 function(event){
                             console.log("rotateModel clicked");
                             callbacks.autoRotationHandler(event, ()=>forceRedraw() );
@@ -125,14 +125,14 @@ function main(){
 
 
                 function forceRedraw(){
-                    FZIindicator.enableRedraw();
+                    State.enableRedraw();
                     drawLoop();
                 }
 
 
                 function drawLoop() {
 
-                    if(FZIindicator.redraw) {
+                    if(State.redraw) {
                         mCtx.fillStyle = "#eeeeee";
                         mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
                         mCtx.fillStyle = "#3c3c3c";
@@ -140,13 +140,10 @@ function main(){
                         mTransform.pipelineTransform(inputVertices, outputVertices, viewCoordCaptures);
 
                         meshUtil.drawFaceWithZOrder(mCtx, outputVertices, faces);
-                        FZIindicator.disableRedraw(); /*disable redraw after one full cycle*/
+                        State.disableRedraw(); /*disable redraw after one full cycle*/
                         requestAnimationFrame(drawLoop);
                     }
                     console.log("drawloop running");
-
-
-
                 }
 
                 drawLoop();

@@ -26,16 +26,61 @@ const mPanCamera = new Pan(
     new Vec4(0,0,3), new Vec4(0,0,2), new Vec4(0,1,0)
 );
 
-/*FZI requirement indicator class*/
-class FZIindicator{
-    static redraw = true;/*draw based on fzi initially*/
+/* helper class for retaining state */
+class State {
+    static redraw = true;/* draw based on fzi initially */
+    static autoRotate = false;
+    static autoRotationFPSValue = 25;/*fps*/
+    static autoRotateAnimationIDValue = -1;
+    static maxFPSAllowedValue = 55;/*fps*/
 
-    static disableRedraw(){
-        FZIindicator.redraw = false;
+
+    static get autoRotationAnimationID(){
+        return State.autoRotateAnimationIDValue;
     }
 
-    static enableRedraw(){
-        FZIindicator.redraw = true;
+    static set autoRotationAnimationID(ID){
+        State.autoRotateAnimationIDValue = ID;
+    }
+
+    static get autoRotationFPS(){
+        return State.autoRotationFPSValue;
+    }
+
+    static set autoRotateFPS(fpsValue){
+        if( fpsValue > State.maxFPSAllowed ){
+            fpsValue = State.maxFPSAllowed;
+        }
+        State.autoRotationFPSValue = fpsValue;
+    }
+
+
+
+    static get maxFPSAllowed(){
+        return State.maxFPSAllowedValue;
+    }
+
+
+    static getAutoRotationState(){
+        return State.autoRotate;
+    }
+
+    static enableAutoRotation(){
+        State.autoRotate = true;
+    }
+
+    static disableAutoRotation(){
+        State.autoRotate = false;
+        State.autoRotateAnimationIDValue = -1;
+    }
+
+
+    static disableRedraw() {
+        State.redraw = false;
+    }
+
+    static enableRedraw() {
+        State.redraw = true;
     }
 }
 
@@ -45,4 +90,4 @@ const mPanner = new Panner();
 
 export { HEIGHT, WIDTH, mTrackballCamera,
     mPanCamera,mModeler, mPanner,
-    zIndexFilter, FZIindicator };
+    zIndexFilter, State };

@@ -1,7 +1,9 @@
 import {Vec4} from "./utils/mathObjects.js";
 import * as global from "./init.js";
-import {mTrackballCamera, mPanner,
-    mModeler, zIndexFilter} from "./init.js";
+import {
+    mTrackballCamera, mPanner,
+    mModeler, zIndexFilter, State
+    } from "./init.js";
 import {Convert} from "./utils/utils.js";
 
 
@@ -129,12 +131,6 @@ class Transformation {
 }
 
 
-var xMan = 0;
-
-
-
-
-
 
 class ModelTransformations{
 
@@ -143,8 +139,6 @@ class ModelTransformations{
         this.xRotation = 0;
         this.autoRotation = false;
         this.autoRotateAnimationID = -1;
-        this.animationFPS = 25;//default 25 fps
-        this.maxFPSAllowed = 55;/*fps*/
     }
 
     rotateY(vec4In, vec4Out){
@@ -177,15 +171,18 @@ class ModelTransformations{
 
     /*used to autoRotation the model in it's local x-axis*/
     autoRotate(rotationCallback = null, fac=.01){
-        this.autoRotateAnimationID = setInterval(
-            function(){
-                if(rotationCallback != null){
-                    rotationCallback();
-                }
-                this.autoRotation = true;
-                this.yRotation += fac;
-            }.bind(this), Convert.fpsIntervals(this.autoRotateFPS)
-        )
+
+        if( !State.getAutoRotationState() ) {/*if autoRotation is not enabled*/
+            State.autoRotationAnimationID = setInterval(
+                function () {
+                    if (rotationCallback != null) {
+                        rotationCallback();
+                    }
+                    State.enableAutoRotation();
+                    this.yRotation += fac;/* rotate y */
+                }.bind(this), Convert.fpsIntervals(State.autoRotationFPS)
+            )
+        }
     }
 
     /* model space transformations */
@@ -195,10 +192,9 @@ class ModelTransformations{
     }
 
     clearAutoRotate(){
-        if(this.autoRotateAnimationID != -1) {
-            clearInterval(this.autoRotateAnimationID);
-            this.autoRotation = false;
-            this.autoRotateAnimationID = -1;
+        if(State.autoRotateAnimationID != -1) {
+            clearInterval(State.autoRotateAnimationID);
+            State.disableAutoRotation();
         }
     }
 
@@ -206,23 +202,8 @@ class ModelTransformations{
         return this.autoRotation;
     }
 
-    get autoRotateFPS(){
-        return this.animationFPS;
-    }
 
-    set autoRotateFPS(fpsValue){
-        if(fpsValue > this.maxFPS){
-            fpsValue = this.maxFPS;
-        }
-        this.animationFPS = fpsValue;
-    }
-
-    get maxFPS(){
-        return this.maxFPSAllowed;
-    }
 
 }
-
-
 
 export {Transformation, ModelTransformations};
