@@ -1,5 +1,5 @@
-import {TransformUtils} from "./utils/transformationUtils.js";
 import {Vec4} from "./utils/mathObjects.js";
+import {TransformUtils} from "./utils/transformationUtils.js";
 
 class Camera{
     constructor(vec4_position = new Vec4(0,0,3),

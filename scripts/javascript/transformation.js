@@ -1,7 +1,8 @@
 import {Vec4} from "./utils/mathObjects.js";
-import * as global from "./GLOBALs.js";
+import * as global from "./init.js";
 import {mTrackballCamera, mPanner,
-    mModeler, zIndexFilter} from "./GLOBALs.js";
+    mModeler, zIndexFilter} from "./init.js";
+import {Convert} from "./utils/utils.js";
 
 
 class Transformation {
@@ -140,6 +141,10 @@ class ModelTransformations{
     constructor(){
         this.yRotation = 0;
         this.xRotation = 0;
+        this.autoRotation = false;
+        this.autoRotateAnimationID = -1;
+        this.animationFPS = 25;//default 25 fps
+        this.maxFPSAllowed = 55;/*fps*/
     }
 
     rotateY(vec4In, vec4Out){
@@ -170,10 +175,50 @@ class ModelTransformations{
         this.xRotation += fac;
     }
 
+    /*used to autoRotation the model in it's local x-axis*/
+    autoRotate(rotationCallback = null, fac=.01){
+        this.autoRotateAnimationID = setInterval(
+            function(){
+                if(rotationCallback != null){
+                    rotationCallback();
+                }
+                this.autoRotation = true;
+                this.yRotation += fac;
+            }.bind(this), Convert.fpsIntervals(this.autoRotateFPS)
+        )
+    }
+
     /* model space transformations */
     modelTransform(vec4In, vec4Out){
         return this.rotateXAccumulate(
             this.rotateY(vec4In, vec4Out) );
+    }
+
+    clearAutoRotate(){
+        if(this.autoRotateAnimationID != -1) {
+            clearInterval(this.autoRotateAnimationID);
+            this.autoRotation = false;
+            this.autoRotateAnimationID = -1;
+        }
+    }
+
+    get autoRotationStatus(){
+        return this.autoRotation;
+    }
+
+    get autoRotateFPS(){
+        return this.animationFPS;
+    }
+
+    set autoRotateFPS(fpsValue){
+        if(fpsValue > this.maxFPS){
+            fpsValue = this.maxFPS;
+        }
+        this.animationFPS = fpsValue;
+    }
+
+    get maxFPS(){
+        return this.maxFPSAllowed;
     }
 
 }

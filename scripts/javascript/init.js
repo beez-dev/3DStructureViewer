@@ -1,10 +1,22 @@
 import {Vec4} from "./utils/mathObjects.js";
-import {FZI, ZIndexFilter} from "./zIndexSorting.js";
 import {Trackball, Pan, Panner} from "./camera.js";
+import {FZI, ZIndexFilter} from "./zIndexSorting.js";
 import {ModelTransformations} from "./transformation.js";
+import {Measures} from "./utils/utils.js";
 
 var WIDTH = document.documentElement.clientWidth;
 var HEIGHT = document.documentElement.clientHeight;
+
+
+const masterDIV = document.getElementById("masterDIV");
+masterDIV.style.width = Measures.px(WIDTH);
+masterDIV.style.height = Measures.px(HEIGHT);
+
+const uploadButton = document.querySelector('.uploadButton');
+uploadButton.addEventListener('click', function(event){
+        document.querySelector('#uploadModelButton-real').click();
+        });
+
 
 const mModeler = new ModelTransformations();
 

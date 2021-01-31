@@ -54,6 +54,13 @@ class MathUtils{
 }
 
 
+class Convert{
+    /*converts fps value to the intervals required to complete the frame per second*/
+    static fpsIntervals(fpsValue, timeInterval){
+        return timeInterval/fpsValue;
+    }
+}
+
 class StringUtils{
     /*
     * returns true if string1 begins exactly with string2
@@ -126,4 +133,5 @@ class ObjectUtils{
 }
 
 
-export {Measures, MathUtils, StringUtils, CssHelper,ObjectUtils};
+export {Measures, MathUtils, StringUtils,
+    CssHelper,ObjectUtils, Convert};

@@ -1,6 +1,6 @@
-import {mTrackballCamera} from "../GLOBALs.js";
-import {TransformUtils} from "./transformationUtils.js";
 import {Vec4} from "./mathObjects.js";
+import {mTrackballCamera} from "../init.js";
+import {TransformUtils} from "./transformationUtils.js";
 
 class MeshUtils{
     constructor() {
@@ -128,8 +128,6 @@ class MeshUtils{
        );
 
     }
-
-
 }
 
 class Face{

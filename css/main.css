@@ -1,0 +1,81 @@
+body{
+    /*disable all scrollbars*/
+    overflow: hidden;
+}
+
+#masterDIV{
+    position:relative;
+}
+
+.uploadButtonContainer{
+    width:54px;
+    height:34px;
+    position:absolute;
+    /*background-color: aqua;*/
+    right: 0px;
+    top:0px;
+    margin-right:20px;
+    margin-top:20px;
+    filter: drop-shadow(0px 0px 4px #000000);
+}
+
+#uploadModelButton-real{
+    display:none;
+}
+
+.uploadButton {
+    height: 100%;
+    width: 100%;
+    background: url('../images/icons/IC_upload_128BY80.svg') no-repeat center top;
+    background-size:contain;
+    cursor:pointer;
+
+}
+
+
+.bottomRightIcons {
+    width: 20%;
+    height: 34px;
+    right: 0px;
+    bottom: 0px;
+    /*background-color: #ec506b;*/
+    position: absolute;
+    margin-bottom:20px;
+    margin-right:20px;
+    bottom: 0px;
+    right: 0px;
+}
+
+
+.rotateModel {
+    width: 20%;
+    height: 100%;
+    background: url("../images/icons/IC_rotation.svg") no-repeat center right;
+    background-size:contain;
+    /*background-color: red;*/
+    float: right;
+    cursor:pointer;
+    filter: drop-shadow(0px 0px 4px #000000);
+}
+
+.projectionSwitch{
+    width:20%;
+    height:100%;
+    background: url("../images/icons/IC_cube.svg") no-repeat center right;
+    background-size:contain;
+    /*background-color: green;*/
+    float:right;
+    cursor:pointer;
+    filter: drop-shadow(0px 0px 4px #000000);
+}
+
+.shadingSelection{
+    width:20%;
+    height:100%;
+    background: url("../images/icons/IC_shading.svg") no-repeat center right;
+    background-size:contain;
+    /*background-color: blue;*/
+    float:right;
+    cursor:pointer;
+    filter: drop-shadow(0px 0px 4px #000000);
+}

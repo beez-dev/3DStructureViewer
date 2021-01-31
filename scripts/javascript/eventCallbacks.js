@@ -1,6 +1,7 @@
-import {mModeler, mPanCamera, mPanner, mTrackballCamera} from "./GLOBALs.js";
-import {TransformUtils} from "./utils/transformationUtils.js";
 import {Vec4} from "./utils/mathObjects.js";
+import {TransformUtils} from "./utils/transformationUtils.js";
+import {mModeler, mPanCamera, mPanner,
+        mTrackballCamera} from "./init.js";
 
 class EventCallback{
 
@@ -43,7 +44,7 @@ class EventCallback{
 
     }
 
-    mouseMoveHandler(event) {
+    mouseMoveHandler(event, onDragCallback=null) {
         // console.log("mouse is moving...");
         let speed = .15;
         let directionX = 1;
@@ -61,11 +62,13 @@ class EventCallback{
 
 
         if (this.mouseDown) {
-
+            if(onDragCallback != null){
+                onDragCallback();
+            }
             if(this.mouseDownButton === 0){
                 /*pan the model*/
-                mPanner.moveHorizontal(directionX * Math.abs(this.mouseDownX - eventClientX));
-                mPanner.moveVertical(directionY * Math.abs(this.mouseDownY - eventClientY));
+                mPanner.moveHorizontal(directionX * Math.abs(this.mouseDownX - eventClientX) );
+                mPanner.moveVertical  (directionY * Math.abs(this.mouseDownY - eventClientY) );
 
             }
             else if(this.mouseDownButton === 1) {
@@ -99,14 +102,23 @@ class EventCallback{
     }
 
     mouseEnteredHandler(event){
-        console.log("mouse has entered");
+        // console.log("mouse has entered");
     }
 
     mouseLeaveHandler(event){
         this.mouseDown= false;
-        console.log("mouse has left");
+        // console.log("mouse has left");
     }
 
+
+    autoRotationHandler(event, onRotateCallback){
+        if(mModeler.autoRotationStatus){
+            /*stop autoRotating*/
+        }else {
+            /*start autoRotating*/
+            mModeler.autoRotate(onRotateCallback);
+        }
+    }
 
 
     /*get the x, y coordinate tuple relative to the canvas */

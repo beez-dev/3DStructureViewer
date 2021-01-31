@@ -1,19 +1,19 @@
-import * as global from "./GLOBALs.js";
+import * as global from "./init.js";
 import {FZI} from "./zIndexSorting.js";
 import {ObjParser} from "./ObjParser.js";
 import {EventCallback} from "./eventCallbacks.js";
 import {Transformation} from "./transformation.js";
 import {Face, MeshUtils} from "./utils/meshUtils.js";
 import {Vec2, Vec3, Vec4} from "./utils/mathObjects.js";
-import {FZIindicator, mTrackballCamera} from "./GLOBALs.js";
+import {FZIindicator, mTrackballCamera} from "./init.js";
 import {TransformUtils} from "./utils/transformationUtils.js";
 
 
 
 function main(){
 
-    let canvas = document.querySelector('canvas');
-    let mCtx = document.querySelector('canvas').getContext('2d');
+    let canvas = document.querySelector('#masterCanvas');
+    let mCtx = document.querySelector('#masterCanvas').getContext('2d');
     let width = global.WIDTH;
     let height = global.HEIGHT;
 
@@ -25,7 +25,7 @@ function main(){
     mCtx.fillStyle = "#eeeeee";
     mCtx.fillRect( 0,0,width,height );
 
-    let input = document.querySelector("input[type=file]");
+    let input = document.getElementById('uploadModelButton-real');
     let meshUtil = new MeshUtils();
     let callbacks = new EventCallback();
     let parser = null;
@@ -90,18 +90,17 @@ function main(){
 
                 canvas.addEventListener("mousemove",
                     function (event) {
-                        forceRedraw();
-                        callbacks.mouseMoveHandler(event);
+                        callbacks.mouseMoveHandler(event, ()=>forceRedraw());
                     }.bind(this));
 
                 canvas.addEventListener("mouseenter",
                     function (event) {
-                        forceRedraw();
+                        // forceRedraw();
                         callbacks.mouseEnteredHandler(event);
                     });
 
                 canvas.addEventListener("mouseleave", function (event) {
-                    forceRedraw();
+                    // forceRedraw();
                     callbacks.mouseLeaveHandler(event);
                 });
 
@@ -113,9 +112,15 @@ function main(){
                 );
 
                 document.addEventListener("keypress",
-                    function (event) {
+                function (event) {
                         forceRedraw();
                         callbacks.keyPressHandler(event);
+                    });
+
+                document.getElementsByClassName('rotateModel')[0].addEventListener("click",
+                function(event){
+                            console.log("rotateModel clicked");
+                            callbacks.autoRotationHandler(event, ()=>forceRedraw() );
                     });
 
 
@@ -126,18 +131,22 @@ function main(){
 
 
                 function drawLoop() {
+
                     if(FZIindicator.redraw) {
                         mCtx.fillStyle = "#eeeeee";
                         mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
-                        mCtx.fillStyle = "#ee0000";
-                        mCtx.strokeStyle = "#393939";
+                        mCtx.fillStyle = "#3c3c3c";
+                        mCtx.strokeStyle = "#9b9b9b";
                         mTransform.pipelineTransform(inputVertices, outputVertices, viewCoordCaptures);
 
                         meshUtil.drawFaceWithZOrder(mCtx, outputVertices, faces);
                         FZIindicator.disableRedraw(); /*disable redraw after one full cycle*/
+                        requestAnimationFrame(drawLoop);
                     }
+                    console.log("drawloop running");
 
-                    requestAnimationFrame(drawLoop);
+
+
                 }
 
                 drawLoop();
