@@ -65,12 +65,12 @@ class Transformation {
         if( State.orthographicEnabled ){
             if ( State.getOrthoProjectionRecalc() ) {
                 /*recalculate*/
-                let top = Math.tan(fovHalf) * near;
+                /*let top = Math.tan(fovHalf) * near;
                 let right = aspectRatio * top;
                 let bottom = -top;
                 let left = -top * aspectRatio;
 
-                /*x and y multipliers saved for optimization*/
+                /!*x and y multipliers saved for optimization*!/
                 this.x1m = 2  / (right - left);
                 this.x2m = (right + left) / (left - right);
 
@@ -81,14 +81,36 @@ class Transformation {
                 this.z2m = (far + near) / (near- far);
 
                 this.w1m = 1;
+                State.disableOrthoProjectionRecalc();*/
+
+
+                /*recalculate*/
+                let top = Math.tan(fovHalf) * near;
+                let right = aspectRatio * top;
+                let bottom = -top;
+                let left = -top * aspectRatio;
+
+                /*x and y multipliers saved for optimization*/
+                this.x1m = (2 * near) / (right - left);
+                this.x2m = (right + left) / (right - left);
+
+                this.y1m = (2 * near) / (top - bottom);
+                this.y2m = (top + bottom) / (top - bottom);
+
+                this.z1m = (-(far + near)) / (far - near);
+                this.z2m = (-2 * (far * near)) / (far - near);
+
+                this.w1m = -1;/*always -1 for NDC division*/
                 State.disableOrthoProjectionRecalc();
+
             }
 
             vec4.x = (this.x1m * vec4.x) + (this.x2m);
             vec4.y = (this.y1m * vec4.y) + (this.y2m);
             vec4.z = (this.z1m * vec4.z) + (this.z2m);
-            vec4.w = (this.w1m);
+            vec4.w = -1;
         }
+
 
         return vec4;
     }
@@ -143,7 +165,6 @@ class Transformation {
 
     pipelineTransform(vec4ArrIn, vec4ArrOut, captureBuffer) {
 
-        // State.enableOrthographic();
 
         for (let i = 0; i < vec4ArrIn.length; i++) {
             this.pipeline(vec4ArrIn[i], vec4ArrOut[i], captureBuffer, i);

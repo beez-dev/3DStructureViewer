@@ -56,20 +56,27 @@ class State {
     }
 
     static get orthographicEnabled(){
-        return !State.perspectiveEnabled;
+        return State.orthographicProjection;
     }
 
-    static enablePerspective(){
+    /* enable perspective projection */
+    static enablePerspective(forceRedraw = false){
         State.orthographicProjection = false;
         State.perpspectiveProjection = true;
         State.enablePerspProjectionRecalc( );
+        if(forceRedraw){
+            State.forceRedraw();
+        }
     }
 
     /* enable orthographic projection */
-    static enableOrthographic(){
+    static enableOrthographic(forceRedraw = false){
         State.orthographicProjection = true;
         State.perspectiveProjection = false;
         State.enableOrthoProjectionRecalc( );
+        if(forceRedraw){
+            State.forceRedraw();
+        }
 
     }
 

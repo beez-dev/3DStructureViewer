@@ -117,9 +117,16 @@ function main(){
                         callbacks.keyPressHandler(event);
                     });
 
-                document.getElementsByClassName('bottomItemContainer')[0].addEventListener("click",
+                document.getElementsByClassName('rotateIcon')[0].addEventListener("click",
                 function(event){
                             callbacks.autoRotationHandler( event );
+                    });
+
+
+                document.getElementsByClassName('projectionSwitch')[0].addEventListener("click",
+                function(event){
+                            console.log("projection switch clicked");
+                            callbacks.projectionSwitchHandler( event );
                     });
 
 

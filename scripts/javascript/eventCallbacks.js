@@ -45,6 +45,7 @@ class EventCallback{
             }
 
         } else {
+
             if (event.deltaY < 0) {
                 Scale.incrementScale();
             } else {
@@ -132,6 +133,16 @@ class EventCallback{
     }
 
 
+    projectionSwitchHandler(event) {
+        if(State.perspectiveEnabled){
+            console.log("orthographic enabled");
+            State.enableOrthographic(true);
+        }else{
+            console.log("perspective enabled");
+            State.enablePerspective(true);
+        }
+    }
+
     /*get the x, y coordinate tuple relative to the canvas */
     getWindowToCanvasCoords(canvas, AbsX, AbsY){
         const rect = canvas.getBoundingClientRect();
@@ -143,6 +154,7 @@ class EventCallback{
     getLastTarget(){
         return this.lastDownTarget;
     }
+
 
 }
 
