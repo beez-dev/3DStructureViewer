@@ -1,8 +1,8 @@
 import {Vec4} from "./utils/mathObjects.js";
 import * as global from "./init.js";
 import {
-    mTrackballCamera, mPanner,
-    mModeler, zIndexFilter, State
+    mainCamera, panner,
+    modeler, zIndexFilter, State
     } from "./init.js";
 import {Convert} from "./utils/utils.js";
 
@@ -10,7 +10,8 @@ import {Convert} from "./utils/utils.js";
 class Transformation {
 
     constructor() {
-        this.reCalcProjection = true;
+        this.reCalcPerspectiveProjection  = true; /* true enables first calculation*/
+        this.reCalcOrthographicProjection = true; /* true enables first calculation*/
         this.x1m = 0;
         this.x2m = 0;
         this.y1m = 0;
@@ -22,62 +23,86 @@ class Transformation {
 
     /*perspective projection matrix transformation
     * */
-    perspectiveProjection(vec4, aspectRatio, fovHalf = 45, near = .1, far = 500) {
+    perspectiveProjection(vec4, aspectRatio= (global.WIDTH / global.HEIGHT),
+                          fovHalf = 45, near = .1, far = 500) {
 
-        if (this.getProjectionRecalc()) {
-            /*recalculate*/
-            let top = Math.tan(fovHalf) * near;
-            let right = aspectRatio * top;
-            let bottom = -top;
-            let left = -top * aspectRatio;
+        if( State.perspectiveEnabled ) {
+            if (State.getPerspProjectionRecalc()) {
+                /*recalculate*/
+                let top = Math.tan(fovHalf) * near;
+                let right = aspectRatio * top;
+                let bottom = -top;
+                let left = -top * aspectRatio;
 
-            /*x and y multipliers saved for optimization*/
-            this.x1m = (2 * near) / (right - left);
-            this.x2m = (right + left) / (right - left);
+                /*x and y multipliers saved for optimization*/
+                this.x1m = (2 * near) / (right - left);
+                this.x2m = (right + left) / (right - left);
 
-            this.y1m = (2 * near) / (top - bottom);
-            this.y2m = (top + bottom) / (top - bottom);
+                this.y1m = (2 * near) / (top - bottom);
+                this.y2m = (top + bottom) / (top - bottom);
 
-            this.z1m = (-(far + near)) / (far - near);
-            this.z2m = (-2 * (far * near)) / (far - near);
+                this.z1m = (-(far + near)) / (far - near);
+                this.z2m = (-2 * (far * near)) / (far - near);
 
-            this.w1m = -1;/*always -1 for NDC division*/
-            this.disableProjectionRecalc();
+                this.w1m = -1;/*always -1 for NDC division*/
+                State.disablePerspProjectionRecalc();
+            }
 
+            /*return clip space coordinates*/
+            vec4.x = (this.x1m * vec4.x) + (this.x2m * vec4.z);
+            vec4.y = (this.y1m * vec4.y) + (this.y2m * vec4.z);
+            vec4.z = (this.z1m * vec4.z) + (this.z2m * vec4.w);
+            vec4.w = (this.w1m  * vec4.z);
         }
-
-        /*return clip space coordinates*/
-
-        vec4.setX((this.x1m * vec4.x) + (this.x2m * vec4.z));
-        vec4.setY((this.y1m * vec4.y) + (this.y2m * vec4.z));
-        vec4.setZ((this.z1m * vec4.z) + (this.z2m * vec4.w));
-        vec4.setW(this.w1m * vec4.z);
 
         return vec4;
 
     }
 
+
+    orthographicProjection( vec4, aspectRatio = (global.WIDTH / global.HEIGHT),
+                           fovHalf = 45, near = .1, far = 500 ){
+        if( State.orthographicEnabled ){
+            if ( State.getOrthoProjectionRecalc() ) {
+                /*recalculate*/
+                let top = Math.tan(fovHalf) * near;
+                let right = aspectRatio * top;
+                let bottom = -top;
+                let left = -top * aspectRatio;
+
+                /*x and y multipliers saved for optimization*/
+                this.x1m = 2  / (right - left);
+                this.x2m = (right + left) / (left - right);
+
+                this.y1m = 2  / (top - bottom);
+                this.y2m = (top + bottom) / (bottom - top);
+
+                this.z1m = 2 / ( near - far);
+                this.z2m = (far + near) / (near- far);
+
+                this.w1m = 1;
+                State.disableOrthoProjectionRecalc();
+            }
+
+            vec4.x = (this.x1m * vec4.x) + (this.x2m);
+            vec4.y = (this.y1m * vec4.y) + (this.y2m);
+            vec4.z = (this.z1m * vec4.z) + (this.z2m);
+            vec4.w = (this.w1m);
+        }
+
+        return vec4;
+    }
 
     ndcTransform(vec4) {
         let wValue = vec4.w;
         vec4.setX((vec4.x / wValue));
         vec4.setY((vec4.y / wValue));
-        vec4.setZ(vec4.z / wValue);
-        vec4.setW(vec4.w / wValue);
+        vec4.setZ((vec4.z / wValue));
+        vec4.setW((vec4.w / wValue));
         return vec4;
     }
 
-    disableProjectionRecalc() {
-        this.reCalcProjection = false;
-    }
 
-    enableProjectionRecalc() {
-        this.reCalcProjection = true;
-    }
-
-    getProjectionRecalc() {
-        return this.reCalcProjection;
-    }
 
     screenTransform(vec4) {
         vec4.setX((vec4.x * global.WIDTH) + global.WIDTH / 2);/*translate to center of the screen*/
@@ -87,7 +112,6 @@ class Transformation {
     }
 
     rotate(vec4) {
-
     }
 
 
@@ -99,12 +123,14 @@ class Transformation {
     pipeline(vec4In, vec4Out, captureBuffer, captureBufferPosition) {
         return this.screenTransform(
             this.ndcTransform(
-                this.perspectiveProjection(
-                    zIndexFilter.capture(captureBuffer,
-                        mPanner.pan(
-                            mTrackballCamera.viewTransform(
-                                mModeler.modelTransform(vec4In, vec4Out), vec4Out)), captureBufferPosition),
-                    global.WIDTH / global.HEIGHT)
+                this.orthographicProjection(
+                    this.perspectiveProjection(
+                        zIndexFilter.capture(captureBuffer,
+                            panner.pan(
+                                mainCamera.viewTransform(
+                                    modeler.modelTransform(vec4In, vec4Out), vec4Out)), captureBufferPosition)
+                    )
+                )
             )
         );
     }
@@ -116,6 +142,9 @@ class Transformation {
     * */
 
     pipelineTransform(vec4ArrIn, vec4ArrOut, captureBuffer) {
+
+        // State.enableOrthographic();
+
         for (let i = 0; i < vec4ArrIn.length; i++) {
             this.pipeline(vec4ArrIn[i], vec4ArrOut[i], captureBuffer, i);
         }
@@ -169,26 +198,25 @@ class ModelTransformations{
         this.xRotation += fac;
     }
 
-    /*used to autoRotation the model in it's local x-axis*/
-    autoRotate(rotationCallback = null, fac=.01){
 
-        if( !State.getAutoRotationState() ) {/*if autoRotation is not enabled*/
-            State.autoRotationAnimationID = setInterval(
-                function () {
-                    if (rotationCallback != null) {
-                        rotationCallback();
-                    }
-                    State.enableAutoRotation();
-                    this.yRotation += fac;/* rotate y */
-                }.bind(this), Convert.fpsIntervals(State.autoRotationFPS)
-            )
-        }
+    /* scales the vector input pointed
+     * to by the reference passed
+     * */
+    scaleUniform( vec4 ){
+        // if ( !State.perspectiveEnabled ) {
+            vec4.x = State.scaleX * vec4.x;
+            vec4.y = State.scaleY * vec4.y;
+            vec4.z = State.scaleZ * vec4.z;
+        // }
+        return vec4;
     }
+
 
     /* model space transformations */
     modelTransform(vec4In, vec4Out){
-        return this.rotateXAccumulate(
-            this.rotateY(vec4In, vec4Out) );
+        return this.scaleUniform(
+                this.rotateXAccumulate(
+                    this.rotateY( vec4In, vec4Out )) );
     }
 
     clearAutoRotate(){

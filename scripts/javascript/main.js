@@ -5,7 +5,7 @@ import {EventCallback} from "./eventCallbacks.js";
 import {Transformation} from "./transformation.js";
 import {Face, MeshUtils} from "./utils/meshUtils.js";
 import {Vec2, Vec3, Vec4} from "./utils/mathObjects.js";
-import {State, mTrackballCamera} from "./init.js";
+import {State, mainCamera} from "./init.js";
 import {TransformUtils} from "./utils/transformationUtils.js";
 
 
@@ -119,8 +119,7 @@ function main(){
 
                 document.getElementsByClassName('bottomItemContainer')[0].addEventListener("click",
                 function(event){
-                            console.log("rotateModel clicked");
-                            callbacks.autoRotationHandler(event, ()=>forceRedraw() );
+                            callbacks.autoRotationHandler( event );
                     });
 
 
@@ -128,6 +127,8 @@ function main(){
                     State.enableRedraw();
                     drawLoop();
                 }
+
+                State.forceRedraw = ()=>forceRedraw();
 
 
                 function drawLoop() {

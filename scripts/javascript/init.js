@@ -2,7 +2,7 @@ import {Vec4} from "./utils/mathObjects.js";
 import {Trackball, Pan, Panner} from "./camera.js";
 import {FZI, ZIndexFilter} from "./zIndexSorting.js";
 import {ModelTransformations} from "./transformation.js";
-import {Measures} from "./utils/utils.js";
+import {Convert, Measures} from "./utils/utils.js";
 
 var WIDTH = document.documentElement.clientWidth;
 var HEIGHT = document.documentElement.clientHeight;
@@ -18,22 +18,159 @@ uploadButton.addEventListener('click', function(event){
         });
 
 
-const mModeler = new ModelTransformations();
+const modeler = new ModelTransformations();
 
-const mTrackballCamera = new Trackball();
+const mainCamera = new Trackball();
 
-const mPanCamera = new Pan(
+const panCamera = new Pan(
     new Vec4(0,0,3), new Vec4(0,0,2), new Vec4(0,1,0)
 );
 
 /* helper class for retaining state */
 class State {
     static redraw = true;/* draw based on fzi initially */
-    static autoRotate = false;
+    static autoRotateState = false;
     static autoRotationFPSValue = 25;/*fps*/
     static autoRotateAnimationIDValue = -1;
     static maxFPSAllowedValue = 55;/*fps*/
+    static autoRotationFactorValue = 0.01;
+    static forceRedraw = ()=>{};/*do nothing by default*/
+    static perspectiveProjection = true;
+    static orthographicProjection = false;
+    static defaultScale = 1;
+    static maxScale = 3;
+    static minScale = 0.1;
+    static currentScaleValue = State.defaultScale;
+    static scaleFactorValue = 0.05;
+    static scaleXValue = State.defaultScale;
+    static scaleYValue = State.defaultScale;
+    static scaleZValue = State.defaultScale;
 
+    /*recalculation optimization variables for projection transformations*/
+    static reCalcPerspectiveProjection  =  true;
+    static reCalcOrthographicProjection =  false;
+
+
+    static get perspectiveEnabled(){
+        return State.perspectiveProjection;
+    }
+
+    static get orthographicEnabled(){
+        return !State.perspectiveEnabled;
+    }
+
+    static enablePerspective(){
+        State.orthographicProjection = false;
+        State.perpspectiveProjection = true;
+        State.enablePerspProjectionRecalc( );
+    }
+
+    /* enable orthographic projection */
+    static enableOrthographic(){
+        State.orthographicProjection = true;
+        State.perspectiveProjection = false;
+        State.enableOrthoProjectionRecalc( );
+
+    }
+
+    static disablePerspProjectionRecalc() {
+        State.reCalcPerspectiveProjection  =  false;
+        State.reCalcOrthographicProjection =  true;
+    }
+
+    static disableOrthoProjectionRecalc() {
+        State.reCalcPerspectiveProjection  = true;
+        State.reCalcOrthographicProjection = false;
+    }
+
+    static enablePerspProjectionRecalc() {
+        State.reCalcPerspectiveProjection  =  true;
+        State.reCalcOrthographicProjection =  false;
+    }
+
+    static enableOrthoProjectionRecalc() {
+        State.reCalcPerspectiveProjection  =  false;
+        State.reCalcOrthographicProjection =  true;
+    }
+
+    static getPerspProjectionRecalc() {
+        return State.reCalcPerspectiveProjection;
+    }
+
+    static getOrthoProjectionRecalc(){
+        return this.reCalcOrthographicProjection;
+    }
+
+
+
+
+    static scaleUniform(fac = Static.defaultScale){
+        if(fac > State.maxScale){
+            fac = State.maxScale;
+        }else if(fac < State.minScale){
+            fac = State.minScale;
+        }
+
+        State.scaleX *= fac;
+        State.scaleY *= fac;
+        State.scaleZ *= fac;
+    }
+
+    static get scaleFactor(){
+        return State.scaleFactorValue;
+    }
+
+    static get currentScale(){
+        return State.currentScaleValue;
+    }
+
+    static set currentScale(value){
+        State.currentScaleValue = value;
+    }
+
+    /* gradually scale the object */
+    static incrementScale() {
+        State.currentScale = 1; /*reset scale start point*/
+        State.currentScale += State.scaleFactorValue;
+        State.scaleUniform( State.currentScale );
+        return State.currentScale;
+    }
+
+    /* gradually scale down the object */
+    static decrementScale() {
+        State.currentScale = 1; /*reset scale start point*/
+        State.currentScale -= State.scaleFactorValue;
+        State.scaleUniform( State.currentScale );
+        return State.currentScale;
+    }
+
+    static set scaleX(value){
+        State.scaleXValue = value;
+    }
+
+    static set scaleY(value){
+        State.scaleYValue = value;
+    }
+
+    static set scaleZ(value){
+        State.scaleZValue = value;
+    }
+
+    static get scaleX(){
+        return State.scaleXValue;
+    }
+
+    static get scaleY(){
+        return State.scaleYValue;
+    }
+
+    static get scaleZ(){
+        return State.scaleZValue;
+    }
+
+    static get autoRotationFactor(){
+        return this.autoRotationFactorValue;
+    }
 
     static get autoRotationAnimationID(){
         return State.autoRotateAnimationIDValue;
@@ -54,26 +191,32 @@ class State {
         State.autoRotationFPSValue = fpsValue;
     }
 
-
-
     static get maxFPSAllowed(){
         return State.maxFPSAllowedValue;
     }
 
-
-    static getAutoRotationState(){
-        return State.autoRotate;
+    static get autoRotationState(){
+        return State.autoRotateState;
     }
 
-    static enableAutoRotation(){
-        State.autoRotate = true;
+    static enableAutoRotation( rotationCallback = ()=>{} ){
+        if( !State.autoRotationState ){ /*if autoRotation is not enabled*/
+            State.autoRotateState = true;
+            State.autoRotationAnimationID = setInterval(
+                function () {
+                        rotationCallback();
+                        State.forceRedraw();
+                }.bind(this), Convert.fpsIntervals(State.autoRotationFPS) );
+        }
     }
 
-    static disableAutoRotation(){
-        State.autoRotate = false;
-        State.autoRotateAnimationIDValue = -1;
+    static disableAutoRotation() {
+        if(State.autoRotationAnimationID !== -1) {
+            clearInterval( State.autoRotationAnimationID );
+        }
+        State.autoRotationAnimationID  = -1;
+        State.autoRotateState = false;
     }
-
 
     static disableRedraw() {
         State.redraw = false;
@@ -82,12 +225,13 @@ class State {
     static enableRedraw() {
         State.redraw = true;
     }
+
 }
 
 const zIndexFilter = new ZIndexFilter();
 
-const mPanner = new Panner();
+const panner = new Panner();
 
-export { HEIGHT, WIDTH, mTrackballCamera,
-    mPanCamera,mModeler, mPanner,
+export { HEIGHT, WIDTH, mainCamera,
+    panCamera,modeler, panner,
     zIndexFilter, State };

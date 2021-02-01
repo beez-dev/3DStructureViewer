@@ -1,7 +1,9 @@
 import {Vec4} from "./utils/mathObjects.js";
 import {TransformUtils} from "./utils/transformationUtils.js";
-import {mModeler, mPanCamera, mPanner,
-        mTrackballCamera} from "./init.js";
+import {
+    modeler, panCamera, panner,
+    mainCamera, State, State as Scale
+} from "./init.js";
 
 class EventCallback{
 
@@ -35,12 +37,20 @@ class EventCallback{
 
     scrollEventHandler(event){
 
-        if(event.deltaY < 0){
-            mTrackballCamera.zoomOut();
-        }else{
-            mTrackballCamera.zoomIn();
-        }
+        if (State.perspectiveEnabled) {
+            if (event.deltaY < 0) {
+                mainCamera.zoomOut();
+            } else {
+                mainCamera.zoomIn();
+            }
 
+        } else {
+            if (event.deltaY < 0) {
+                Scale.incrementScale();
+            } else {
+                Scale.decrementScale();
+            }
+        }
 
     }
 
@@ -67,16 +77,16 @@ class EventCallback{
             }
             if(this.mouseDownButton === 0){
                 /*pan the model*/
-                mPanner.moveHorizontal(directionX * Math.abs(this.mouseDownX - eventClientX) );
-                mPanner.moveVertical  (directionY * Math.abs(this.mouseDownY - eventClientY) );
+                panner.moveHorizontal(directionX * Math.abs(this.mouseDownX - eventClientX) );
+                panner.moveVertical  (directionY * Math.abs(this.mouseDownY - eventClientY) );
 
             }
             else if(this.mouseDownButton === 1) {
                 /*rotate the model*/
                 let scrollSpeedX = .01;
                 let scrollSpeedY = .0045;
-                mModeler.rotY(-directionX * scrollSpeedX *Math.abs(this.mouseDownX - eventClientX) );
-                mModeler.rotX( directionY * scrollSpeedY *Math.abs(this.mouseDownY - eventClientY) );
+                modeler.rotY(-directionX * scrollSpeedX *Math.abs(this.mouseDownX - eventClientX) );
+                modeler.rotX( directionY * scrollSpeedY *Math.abs(this.mouseDownY - eventClientY) );
             }
         }
 
@@ -111,12 +121,13 @@ class EventCallback{
     }
 
 
-    autoRotationHandler(event, onRotateCallback){
-        if(mModeler.autoRotationStatus){
-            /*stop autoRotating*/
+    autoRotationHandler(event){
+        if( State.autoRotationState ){
+            State.disableAutoRotation();
         }else {
-            /*start autoRotating*/
-            mModeler.autoRotate(onRotateCallback);
+            State.enableAutoRotation(
+                ()=>{
+                    modeler.rotY(State.autoRotationFactor) });
         }
     }
 

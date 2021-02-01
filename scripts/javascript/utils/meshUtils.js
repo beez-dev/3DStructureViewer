@@ -1,5 +1,5 @@
 import {Vec4} from "./mathObjects.js";
-import {mTrackballCamera} from "../init.js";
+import {mainCamera} from "../init.js";
 import {TransformUtils} from "./transformationUtils.js";
 
 class MeshUtils{
@@ -89,7 +89,7 @@ class MeshUtils{
             this.vectorDifference2);
 
         if (TransformUtils.dotProduct(this.tempCrossProduct,
-            mTrackballCamera.getDirectionVector()) <= 0) {
+            mainCamera.getDirectionVector()) <= 0) {
             return false;
         }
         return true;
