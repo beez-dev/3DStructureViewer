@@ -36,7 +36,7 @@ function main(){
         parser = new ObjParser( e.target,
             function wholeDraw() {
                 let filename = parser.getAvailableFileNames(); /*single file support only*/
-                let objectName = parser.getAvailableObjectNames(filename);
+                let objectName = parser.getAvailableObjectNames( filename );
                 /*model space vertices of the object
                 * they must not be changed, only transformed by transformation matrices
                 * */
@@ -125,18 +125,26 @@ function main(){
 
                 document.getElementsByClassName('projectionSwitch')[0].addEventListener("click",
                 function(event){
-                            console.log("projection switch clicked");
                             callbacks.projectionSwitchHandler( event );
                     });
 
+                document.getElementsByClassName('shadingTypeSelection')[0].addEventListener("click",
+                    function(event){
+                            callbacks.shadingSelectionHandler(event);
+                    });
 
                 function forceRedraw(){
                     State.enableRedraw();
                     drawLoop();
                 }
 
-                State.forceRedraw = ()=>forceRedraw();
+                /* State(init.js) and meshUtils(meshUtils.js) variables
+                 required for draw operation */
 
+                State.forceRedraw = ()=>forceRedraw();
+                meshUtil.shadeFlatParams  =  [mCtx,outputVertices,fvis];
+                meshUtil.shadeWireParams = [mCtx,outputVertices,fvis];
+                meshUtil.shadeFlatWireParams = [mCtx, outputVertices, faces];
 
                 function drawLoop() {
 
@@ -145,11 +153,16 @@ function main(){
                         mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
                         mCtx.fillStyle = "#3c3c3c";
                         mCtx.strokeStyle = "#9b9b9b";
-                        mTransform.pipelineTransform(inputVertices, outputVertices, viewCoordCaptures);
+                        mTransform.pipelineTransform( inputVertices, outputVertices, viewCoordCaptures );
 
-                        meshUtil.drawFaceWithZOrder(mCtx, outputVertices, faces);
+                        meshUtil.drawUsing(State.currentShadingType);
+
+                        // meshUtil.drawFaceWithZOrder(mCtx, outputVertices, faces);
+                        // meshUtil.drawFaceStroke(mCtx,outputVertices,fvis);
+                        // meshUtil.drawFaceFill(mCtx,outputVertices,fvis);
+
                         State.disableRedraw(); /*disable redraw after one full cycle*/
-                        requestAnimationFrame(drawLoop);
+                        // requestAnimationFrame(drawLoop);
                     }
                     console.log("drawloop running");
                 }

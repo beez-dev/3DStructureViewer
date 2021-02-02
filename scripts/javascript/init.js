@@ -51,6 +51,55 @@ class State {
     static reCalcOrthographicProjection =  false;
 
 
+    static shadingTypesAvailable = [
+                                    State.SHADE_WIRE,
+                                    State.SHADE_FLAT,
+                                    State.SHADE_FLAT_WIRE ];
+
+    static currentDrawTypeValue = State.SHADE_FLAT_WIRE;
+    static currentShadingIndexValue = 2;                /*State.SHADE_FLAT_WIRE is the default shading*/
+
+    static get shadings(){
+        return State.shadingTypesAvailable;
+    }
+
+    static get currentShadingType(){
+        return State.currentDrawTypeValue;
+    }
+
+    static set currentShadingType(drawTypeCode ){
+        State.currentDrawTypeValue = drawTypeCode;
+    }
+
+    /* linearly traverse the shading types */
+    static incrementShadingIndex(){
+        State.currentShadingIndexValue =
+                            (State.currentShadingIndexValue + 1)
+                            % ((State.shadings).length);
+        return State.currentShadingIndexValue;
+    }
+
+    /*traverse all shading types beginning
+        from the current shading type as the
+        start point in the list of available types of shading*/
+    static cycleShadingFromCurrent(){
+         State.currentShadingType = State.shadings[ State.incrementShadingIndex() ];
+    }
+
+
+    static get SHADE_FLAT(){
+        return 3446;
+    }
+
+    static get SHADE_WIRE(){
+        return 3445;
+    }
+
+
+    static get SHADE_FLAT_WIRE(){
+        return 3447;
+    }
+
     static get perspectiveEnabled(){
         return State.perspectiveProjection;
     }
@@ -62,10 +111,10 @@ class State {
     /* enable perspective projection */
     static enablePerspective(forceRedraw = false){
         State.orthographicProjection = false;
-        State.perpspectiveProjection = true;
+        State.perspectiveProjection = true;
         State.enablePerspProjectionRecalc( );
         if(forceRedraw){
-            State.forceRedraw();
+            State.forceRedraw(  );
         }
     }
 

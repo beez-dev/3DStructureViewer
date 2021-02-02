@@ -22,15 +22,6 @@ class EventCallback{
     }
 
 
-    cameraTranslate(camera, x, y) {
-        let direction = 1;
-
-        if(this.mouseDown) {
-
-        }
-
-    }
-
     keyPressHandler(event){
         console.log("key is pressed");
     }
@@ -132,7 +123,6 @@ class EventCallback{
         }
     }
 
-
     projectionSwitchHandler(event) {
         if(State.perspectiveEnabled){
             console.log("orthographic enabled");
@@ -141,6 +131,12 @@ class EventCallback{
             console.log("perspective enabled");
             State.enablePerspective(true);
         }
+    }
+
+    shadingSelectionHandler(event){
+        console.log("shading selection working")
+        State.cycleShadingFromCurrent();
+        State.forceRedraw();
     }
 
     /*get the x, y coordinate tuple relative to the canvas */

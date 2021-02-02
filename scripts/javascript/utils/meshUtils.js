@@ -1,5 +1,5 @@
 import {Vec4} from "./mathObjects.js";
-import {mainCamera} from "../init.js";
+import {mainCamera, State as Static} from "../init.js";
 import {TransformUtils} from "./transformationUtils.js";
 
 class MeshUtils{
@@ -12,7 +12,37 @@ class MeshUtils{
         this.vectorDifference1 =  new Vec4();
         this.vectorDifference2 =  new Vec4();
         this.tempCrossProduct  =  new Vec4();
+
+        this.shadeFlatParametersArray = [];
+        this.shadeWireParametersArray = [];
+        this.shadeFlatWireParametersArray = [];
+
     }
+
+    set shadeFlatParams(paramsArray){
+        this.shadeFlatParametersArray = paramsArray;
+    }
+
+    set shadeWireParams(paramsArray){
+        this.shadeWireParametersArray = paramsArray;
+    }
+
+    set shadeFlatWireParams(paramsArray){
+        this.shadeFlatWireParametersArray = paramsArray;
+    }
+
+    get shadeFlatParams(){
+        return this.shadeFlatParametersArray;
+    }
+
+    get shadeWireParams(){
+        return this.shadeWireParametersArray ;
+    }
+
+    get shadeFlatWireParams(){
+        return this.shadeFlatWireParametersArray;
+    }
+
 
     /*
     * vertices = array of Vec2 objects;
@@ -33,17 +63,14 @@ class MeshUtils{
         }
     }
 
-
     drawFaceStroke(ctx, vertices, fvis){
         fvis.forEach(
             function(fvi){
                 this.drawFace(ctx, vertices, fvi);
                 ctx.closePath();
                 ctx.stroke();
-            }.bind(this)
-        )
+            }.bind(this) );
     }
-
 
     drawFaceFillStroke(ctx, vertices, fvis){
         fvis.forEach(
@@ -51,6 +78,16 @@ class MeshUtils{
                 this.drawFace(ctx,vertices, fvi);
                 ctx.closePath();
                 ctx.stroke();
+                ctx.fill();
+            }.bind(this)
+        );
+    }
+
+    drawFaceFill(ctx, vertices, fvis){
+        fvis.forEach(
+            function(fvi){
+                this.drawFace(ctx,vertices, fvi);
+                ctx.closePath();
                 ctx.fill();
             }.bind(this)
         );
@@ -95,7 +132,6 @@ class MeshUtils{
         return true;
     }
 
-
     drawWithBackfaceCulling(ctx, outputVertices, fvis){
         fvis.forEach(
             function(fvi){
@@ -103,7 +139,6 @@ class MeshUtils{
             }.bind(this)
         );
     }
-
 
     /* backface culling taking individual fvi as input */
     drawWithBackfaceCullingIndivFvi(ctx, outputVertices, fvi){
@@ -128,7 +163,24 @@ class MeshUtils{
        );
 
     }
+
+    drawUsing(drawTypeCode){
+        switch(drawTypeCode){
+            case Static.SHADE_FLAT_WIRE:/*90% used*/
+                return this.drawFaceWithZOrder(...this.shadeFlatWireParams);
+            case Static.SHADE_FLAT:
+                return this.drawFaceFill(...this.shadeFlatParams); /*zOrder not used*/
+            case Static.SHADE_WIRE:
+                return this.drawFaceStroke(...this.shadeWireParams); /*zOrder not used*/
+            default :
+                /*don't shade by default*/
+                return ()=>{};
+        }
+    }
+
 }
+
+
 
 class Face{
     constructor(fvi=[]){
