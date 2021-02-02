@@ -111,11 +111,21 @@ function main(){
                     }, false
                 );
 
-                document.addEventListener("keypress",
+                document.getElementById("burgerIcon").addEventListener("click",
+                    function(event){
+                        callbacks.burgerMenuHandler(event);
+                    });
+
+                document.getElementById("closeSettingPanel").addEventListener("click",
+                    function(event){
+                        callbacks.closeSettingPanelHandler(event);
+                    });
+
+                /*document.addEventListener("keypress",
                 function (event) {
                         forceRedraw();
                         callbacks.keyPressHandler(event);
-                    });
+                    });*/
 
                 document.getElementsByClassName('rotateIcon')[0].addEventListener("click",
                 function(event){

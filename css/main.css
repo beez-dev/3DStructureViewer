@@ -33,7 +33,78 @@ body{
 }
 
 
-.bottomRightIcons {
+#burgerIconContainer{
+    width:54px;
+    height:24px;
+    position:absolute;
+    /*background-color: aqua;*/
+    left: 0px;
+    top:0px;
+    margin-left:20px;
+    margin-top:20px;
+    filter: drop-shadow(0px 0px 4px #000000);
+}
+
+#burgerIcon{
+    width:100%;
+    height:100%;
+    background: url("../images/icons/IC_burgerMenu.svg") no-repeat center center;
+    background-size:contain;
+    cursor:pointer;
+}
+
+#closeSettingPanelContainer{
+    width:100%;
+    height:20px;
+    padding-top:5px;
+    padding-right:5px;
+}
+
+#closeSettingPanel {
+    width: 30px;
+    height: 100%;
+    background: url("../images/icons/IC_closeButton.svg") no-repeat center right;
+    background-size: contain;
+    float: right;
+    cursor:pointer;
+}
+
+#settingPanelMain {
+    width: 300px;
+    height: 100%;
+    background-color: #444;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    transform: translateX(-300px); /*equivalent to using percentage, when using full width and reference parent element is viewport, using vw- viewport width units*/
+    transition:transform 250ms;
+}
+
+#settingPanelTitle{
+    font-size:22px;
+    text-align:center;
+    color:#ffffff77;
+}
+
+
+.settingPanelTitleItemDivider{
+    height:2px;
+    width:90%;
+    margin: 0 auto;
+    background-color:#ffffff88;
+    margin-top:4px;
+    margin-bottom:10px;
+}
+
+
+
+#settingPanelContainer{
+    width:95%;
+    height:100%;
+    margin:0 auto;
+}
+
+.bottomRightIconsMainContainer {
     width: 20%;
     height: 34px;
     right: 0px;
@@ -77,17 +148,17 @@ body{
 }
 
 .rotateIcon {
-    background: url("../images/icons/IC_rotation.svg") no-repeat center center;
+    background: url("../images/icons/IC_turntableAnimation.svg") no-repeat center center;
     background-size:contain;
 }
 
 .projectionSwitch{
-    background: url("../images/icons/IC_cube.svg") no-repeat center center;
+    background: url("../images/icons/IC_projectionType.svg") no-repeat center center;
     background-size:contain;
 }
 
 .shadingTypeSelection{
-    background: url("../images/icons/IC_shading.svg") no-repeat center center;
+    background: url("../images/icons/IC_shadingType.svg") no-repeat center center;
     background-size:contain;
 }
 
@@ -117,3 +188,8 @@ body{
     padding-left:5px;
 }
 
+
+
+#settingPanelMain{
+
+}

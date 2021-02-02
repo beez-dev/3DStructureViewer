@@ -2,5 +2,6 @@
     margin: 0;
     padding: 0;
     font-family: 'Sarabun', sans-serif;
+    box-sizing: border-box;/*no increase of size on padding*/
 }
 

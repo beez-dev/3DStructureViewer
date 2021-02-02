@@ -134,10 +134,20 @@ class EventCallback{
     }
 
     shadingSelectionHandler(event){
-        console.log("shading selection working")
         State.cycleShadingFromCurrent();
         State.forceRedraw();
     }
+
+    burgerMenuHandler(event){
+            document.getElementById('settingPanelMain')
+                .style.transform = "translate(0px)";
+    }
+
+    closeSettingPanelHandler(event){
+        document.getElementById('settingPanelMain')
+            .style.transform = "translate(-300px)";
+    }
+
 
     /*get the x, y coordinate tuple relative to the canvas */
     getWindowToCanvasCoords(canvas, AbsX, AbsY){
