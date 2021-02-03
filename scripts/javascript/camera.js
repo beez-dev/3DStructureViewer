@@ -85,6 +85,14 @@ class Camera{
         this.P.z += this.zoomTranslationFactor;
     }
 
+    zoomOutFac(factorValue) {
+        this.P.z -= factorValue;
+    }
+
+    zoomInFac(factorValue){
+        this.P.z += factorValue;
+    }
+
 }
 
 

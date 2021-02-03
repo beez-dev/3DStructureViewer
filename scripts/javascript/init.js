@@ -1,7 +1,7 @@
 import {Vec4} from "./utils/mathObjects.js";
 import {Trackball, Pan, Panner} from "./camera.js";
 import {FZI, ZIndexFilter} from "./zIndexSorting.js";
-import {ModelTransformations} from "./transformation.js";
+import {ModelTransformations, Scaler} from "./transformation.js";
 import {Convert, Measures} from "./utils/utils.js";
 
 var WIDTH = document.documentElement.clientWidth;
@@ -26,7 +26,9 @@ const panCamera = new Pan(
     new Vec4(0,0,3), new Vec4(0,0,2), new Vec4(0,1,0)
 );
 
-/* helper class for retaining state */
+const screenSpaceScaler = new Scaler();
+
+/* helper class for retaining state and globally used Constants */
 class State {
     static redraw = true;/* draw based on fzi initially */
     static autoRotateState = false;
@@ -184,17 +186,17 @@ class State {
         State.currentScaleValue = value;
     }
 
-    /* gradually scale the object */
+    /* gradually scaleScreenSpace the object */
     static incrementScale() {
-        State.currentScale = 1; /*reset scale start point*/
+        State.currentScale = 1; /*reset scaleScreenSpace start point*/
         State.currentScale += State.scaleFactorValue;
         State.scaleUniform( State.currentScale );
         return State.currentScale;
     }
 
-    /* gradually scale down the object */
+    /* gradually scaleScreenSpace down the object */
     static decrementScale() {
-        State.currentScale = 1; /*reset scale start point*/
+        State.currentScale = 1; /*reset scaleScreenSpace start point*/
         State.currentScale -= State.scaleFactorValue;
         State.scaleUniform( State.currentScale );
         return State.currentScale;
@@ -282,7 +284,50 @@ class State {
         State.redraw = true;
     }
 
+
+    static get TRANSLATE_X(){
+        return "_tx_";
+    }
+
+    static get TRANSLATE_Y(){
+        return "_ty_";
+    }
+
+    static get TRANSLATE_Z(){
+        return "_tz_";
+    }
+
+    static get ROT_X(){
+        return "_rx_";
+    }
+
+    static get ROT_Y(){
+        return "_ry_";
+    }
+
+    /*static get SCALE_X(){
+        return "_sx_";
+    }
+
+    static get SCALE_Y(){
+        return "_sy_";
+    }
+
+    static get SCALE_Z(){
+        return "_sz_";
+    }
+
+    static get SLIDER_TRANSLATE_FACTOR(){
+        return 20;
+    }*/
+
 }
+
+
+class ConstantValue{
+
+}
+
 
 const zIndexFilter = new ZIndexFilter();
 
@@ -290,4 +335,4 @@ const panner = new Panner();
 
 export { HEIGHT, WIDTH, mainCamera,
     panCamera,modeler, panner,
-    zIndexFilter, State };
+    zIndexFilter, State, screenSpaceScaler};

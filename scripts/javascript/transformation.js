@@ -2,8 +2,8 @@ import {Vec4} from "./utils/mathObjects.js";
 import * as global from "./init.js";
 import {
     mainCamera, panner,
-    modeler, zIndexFilter, State
-    } from "./init.js";
+    modeler, zIndexFilter, State, screenSpaceScaler
+} from "./init.js";
 import {Convert} from "./utils/utils.js";
 
 
@@ -143,18 +143,19 @@ class Transformation {
     * vec4 come from the model space
     * */
     pipeline(vec4In, vec4Out, captureBuffer, captureBufferPosition) {
-        return this.screenTransform(
+        return screenSpaceScaler.scaleScreenSpace(this.screenTransform(
             this.ndcTransform(
                 this.orthographicProjection(
                     this.perspectiveProjection(
                         zIndexFilter.capture(captureBuffer,
                             panner.pan(
                                 mainCamera.viewTransform(
-                                    modeler.modelTransform(vec4In, vec4Out), vec4Out)), captureBufferPosition)
+                                    modeler.modelTransform(vec4In, vec4Out), vec4Out) ), captureBufferPosition)
                     )
                 )
-            )
-        );
+             )
+          )
+       );
     }
 
 
@@ -173,7 +174,6 @@ class Transformation {
         /* view space coordinates have been captured at this point */
         /* proceed with face index sorting */
         /*TODO - user event optimization can be done here*/
-
 
     }
 
@@ -221,7 +221,7 @@ class ModelTransformations{
 
 
     /* scales the vector input pointed
-     * to by the reference passed
+     * to by the reference passed- in model space
      * */
     scaleUniform( vec4 ){
         // if ( !State.perspectiveEnabled ) {
@@ -232,6 +232,20 @@ class ModelTransformations{
         return vec4;
     }
 
+    /*model space x scaling*/
+    scaleXFac(fac){
+        State.scaleX += fac;
+    }
+
+    /*model space y scaling*/
+    scaleYFac(fac){
+        State.scaleY += fac;
+    }
+
+    /*model space z scaling*/
+    scaleZFac(fac){
+        State.scaleZ += fac;
+    }
 
     /* model space transformations */
     modelTransform(vec4In, vec4Out){
@@ -255,4 +269,58 @@ class ModelTransformations{
 
 }
 
-export {Transformation, ModelTransformations};
+class Scaler{
+    constructor(){
+        this.scaleXValue = 1;
+        this.scaleYValue = 1;
+        this.scaleZValue = 1;
+    }
+
+    /* scale in screen space as opposed to model space */
+    scaleScreenSpace(vec4){
+        vec4.x = ((vec4.x - global.WIDTH/2) * this.scaleX)+(global.WIDTH/2); /* essentially performing    [T].[S].[T^-1] matrix composition for inverse screen transform before scaling*/
+        vec4.y = ((vec4.y - global.HEIGHT/2) * this.scaleY)+(global.HEIGHT/2);
+        vec4.z = vec4.z * this.scaleZ;
+        return vec4;
+    }
+
+
+    get scaleX(){
+        return this.scaleXValue;
+    }
+
+    get scaleY(){
+        return this.scaleYValue;
+    }
+
+    get scaleZ(){
+        return this.scaleZValue;
+    }
+
+    set scaleX(value){
+        this.scaleXValue = value;
+    }
+
+    set scaleY(value){
+        this.scaleYValue = value;
+    }
+
+    set scaleZ(value){
+        this.scaleZValue = value;
+    }
+
+    set scaleXFac(fac){
+        this.scaleX += fac;
+    }
+
+    set scaleYFac(fac){
+        this.scaleY += fac;
+    }
+
+    set scaleZFac(fac){
+        this.scaleZ += fac;
+    }
+
+
+}
+export {Transformation, ModelTransformations, Scaler};

@@ -67,14 +67,6 @@ function main(){
                     }
                 }
 
-                /*for(let i=0; i < faces.length; i++){
-                    let eachFace = faces[i];
-                    for(let j = 0; j < eachFace.viewSpaceVertices.length; j++){
-                        let eachVertex = eachFace.viewSpaceVertices[j];
-                        let eachViewSpaceVertex = viewCoordCaptures[ eachFace.fvi[j] ];
-                        console.log(eachVertex == eachViewSpaceVertex);
-                    }
-                }*/
 
                 canvas.addEventListener("mousedown",
             function (event) {
@@ -111,6 +103,37 @@ function main(){
                     }, false
                 );
 
+                callbacks.translateLastX = document.getElementById("translateX").value;/*retain all repositioned values*/
+                callbacks.translateLastY = document.getElementById("translateY").value;
+                callbacks.translateLastZ = document.getElementById("translateZ").value;
+
+                document.getElementById("translateX").oninput = function(){
+                    callbacks.sliderTranslateHandler( State.TRANSLATE_X, this, document.getElementById("translateMultiplier") );
+                };
+
+                document.getElementById("translateY").oninput = function(){
+                    callbacks.sliderTranslateHandler(State.TRANSLATE_Y, this, document.getElementById("translateMultiplier"));
+                };
+
+                document.getElementById("translateZ").oninput = function(){
+                    callbacks.sliderTranslateHandler(State.TRANSLATE_Z, this, document.getElementById("translateMultiplier"));
+                };
+
+                document.getElementById("scale").oninput = function(){
+                    callbacks.sliderScaleHandler(this);
+                }
+
+
+                document.getElementById("RotX").oninput = function(){
+                    callbacks.sliderRotationHandler(State.ROT_X, this);
+                }
+
+                document.getElementById("RotX").oninput = function(){
+                    callbacks.sliderRotationHandler(State.ROT_Y,this);
+                }
+
+
+
                 document.getElementById("burgerIcon").addEventListener("click",
                     function(event){
                         callbacks.burgerMenuHandler(event);
@@ -127,18 +150,18 @@ function main(){
                         callbacks.keyPressHandler(event);
                     });*/
 
-                document.getElementsByClassName('rotateIcon')[0].addEventListener("click",
+                document.getElementsByClassName("rotateIcon")[0].addEventListener("click",
                 function(event){
                             callbacks.autoRotationHandler( event );
                     });
 
 
-                document.getElementsByClassName('projectionSwitch')[0].addEventListener("click",
+                document.getElementsByClassName("projectionSwitch")[0].addEventListener("click",
                 function(event){
                             callbacks.projectionSwitchHandler( event );
                     });
 
-                document.getElementsByClassName('shadingTypeSelection')[0].addEventListener("click",
+                document.getElementsByClassName("shadingTypeSelection")[0].addEventListener("click",
                     function(event){
                             callbacks.shadingSelectionHandler(event);
                     });
