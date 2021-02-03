@@ -1,0 +1,52 @@
+.slideContainer {
+    width: 95%; /* Width of the outside container */
+    margin-left:5%;
+}
+
+.slideContainerAdjust{
+    margin-top:10px;
+}
+
+.superNestedLabels {
+    height: 100%;
+    /*background-color: red;*/
+    font-size:22px;
+    line-height:0px;
+    color:#eeeeee;
+    text-align:right;
+}
+
+
+
+/* The slider itself */
+.slider {
+    -webkit-appearance: none;
+    width: 85%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    margin-top:2px;
+    outline: none;
+    float:right;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #8a8a8a;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #8a8a8a;
+    cursor: pointer;
+}

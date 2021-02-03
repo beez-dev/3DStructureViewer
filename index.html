@@ -9,11 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@500&display=swap" rel="stylesheet">
     <link rel = "stylesheet" type = "text/css" href = "css/main.css" />
     <link rel = "stylesheet" type = "text/css" href = "css/reset.css" />
-    <link rel = "stylesheet" type = "text/css" href = "css/navigationMain.css" />
-    <link rel = "stylesheet" type = "text/css" href = "css/navigationItems.css" />
-    <link rel = "stylesheet" type = "text/css" href = "css/navigationNestedItems.css" />
-
-
+    <link rel = "stylesheet" type = "text/css" href = "css/navMain.css" />
+    <link rel = "stylesheet" type = "text/css" href = "css/navItems.css" />
+    <link rel = "stylesheet" type = "text/css" href = "css/navNestedItems.css" />
+    <link rel = "stylesheet" type = "text/css" href = "css/navNestedItems_transformations.css" />
 
 
 
@@ -72,13 +71,25 @@
                                             <div class="wrap-collapsible-nest1">
                                                 <input id="collapsible1" class="toggle" type="checkbox">
                                                 <label for="collapsible1" class="lbl-toggle-nest1">Translate</label>
-                                                <div class="collapsible-content">
-                                                    <div class="content-inner">
+                                                <div class="collapsible-content-nest1">
+                                                    <div class="content-inner-nest1">
                                                         <div>
 
                                                             <!-- super-nested groups -->
+                                                            <div class="slideContainer">
+                                                                <label class="superNestedLabels" for="translateX">X: </label>
+                                                                <input id="translateX" type="range" min="1" max="100" value="50" class="slider">
+                                                            </div>
 
+                                                            <div class="slideContainer slideContainerAdjust">
+                                                                <label class="superNestedLabels" for="translateY">Y: </label>
+                                                                <input id="translateY" type="range" min="1" max="100" value="50" class="slider">
+                                                            </div>
 
+                                                            <div class="slideContainer slideContainerAdjust">
+                                                                <label class="superNestedLabels" for="translateZ">Z: </label>
+                                                                <input id="translateZ" type="range" min="1" max="100" value="50" class="slider">
+                                                            </div>
 
                                                             <!-- super-nested groups -->
 
@@ -89,14 +100,27 @@
 
                                             <div class="wrap-collapsible-nest1">
                                                 <input id="collapsible2" class="toggle" type="checkbox">
-                                                <label for="collapsible2" class="lbl-toggle-nest1">Rotation</label>
-                                                <div class="collapsible-content">
-                                                    <div class="content-inner">
+                                                <label for="collapsible2" class="lbl-toggle-nest1">Scale</label>
+                                                <div class="collapsible-content-nest1">
+                                                    <div class="content-inner-nest1">
                                                         <div>
 
                                                             <!-- super-nested groups -->
 
+                                                            <div class="slideContainer">
+                                                                <label class="superNestedLabels" for="ScaleX">X: </label>
+                                                                <input id="ScaleX" type="range" min="1" max="100" value="50" class="slider">
+                                                            </div>
 
+                                                            <div class="slideContainer slideContainerAdjust">
+                                                                <label class="superNestedLabels" for="ScaleY">Y: </label>
+                                                                <input id="ScaleY" type="range" min="1" max="100" value="50" class="slider">
+                                                            </div>
+
+                                                            <div class="slideContainer slideContainerAdjust">
+                                                                <label class="superNestedLabels" for="ScaleZ">Z: </label>
+                                                                <input id="ScaleZ" type="range" min="1" max="100" value="50" class="slider">
+                                                            </div>
 
                                                             <!-- super-nested groups -->
 
@@ -105,17 +129,24 @@
                                                 </div>
                                             </div>
 
-
                                             <div class="wrap-collapsible-nest1">
                                                 <input id="collapsible3" class="toggle" type="checkbox">
-                                                <label for="collapsible3" class="lbl-toggle-nest1">Scale</label>
-                                                <div class="collapsible-content">
-                                                    <div class="content-inner">
+                                                <label for="collapsible3" class="lbl-toggle-nest1">Rotation</label>
+                                                <div class="collapsible-content-nest1">
+                                                    <div class="content-inner-nest1">
                                                         <div>
 
                                                             <!-- super-nested groups -->
 
+                                                            <div class="slideContainer">
+                                                                <label class="superNestedLabels" for="RotX">X: </label>
+                                                                <input id="RotX" type="range" min="1" max="100" value="50" class="slider">
+                                                            </div>
 
+                                                            <div class="slideContainer slideContainerAdjust">
+                                                                <label class="superNestedLabels" for="RotY">Y: </label>
+                                                                <input id="RotY" type="range" min="1" max="100" value="50" class="slider">
+                                                            </div>
 
                                                             <!-- super-nested groups -->
 

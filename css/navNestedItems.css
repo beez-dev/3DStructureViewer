@@ -1,3 +1,4 @@
+
 .lbl-toggle-nest1 {
     display: block;
 
@@ -13,6 +14,7 @@
     cursor: pointer;
 
     border-radius: 7px;
+    margin-bottom:5px;
     transition: all 0.25s ease-out;
 }
 
@@ -35,7 +37,25 @@
     transition: transform .2s ease-out;
 }
 
-.toggle:checked + .lbl-toggle-nest1 + .collapsible-content {
+
+.collapsible-content-nest1 .content-inner-nest1 {
+    background: #474747;
+    /*border-bottom: 1px solid rgba(250, 224, 66, .45);*/
+
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    padding: 10px;
+}
+
+.collapsible-content-nest1 {
+    max-height: 0px;
+    overflow: hidden;
+
+    transition: max-height .25s ease-in-out;
+}
+
+
+.toggle:checked + .lbl-toggle-nest1 + .collapsible-content-nest1 {
     max-height: 100vh;
 }
 
