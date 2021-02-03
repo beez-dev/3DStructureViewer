@@ -1,0 +1,52 @@
+.lbl-toggle-nest1 {
+    display: block;
+
+    font-weight: revert;
+    font-size: 19px;
+    text-align: left;
+
+    padding: 7px;
+
+    color: #a4a4a4;
+    background: #1d1d1d;
+
+    cursor: pointer;
+
+    border-radius: 7px;
+    transition: all 0.25s ease-out;
+}
+
+.lbl-toggle-nest1:hover {
+    color: #c3c3c3;
+}
+
+.lbl-toggle-nest1::before {
+    content: ' ';
+    display: inline-block;
+
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #eeeeee;
+
+    vertical-align: middle;
+    margin-right: 10px;
+    transform: translateY(-2px);
+
+    transition: transform .2s ease-out;
+}
+
+.toggle:checked + .lbl-toggle-nest1 + .collapsible-content {
+    max-height: 100vh;
+}
+
+.toggle:checked + .lbl-toggle-nest1::before {
+    transform: rotate(90deg) translateX(-3px);
+}
+
+.toggle:checked + .lbl-toggle-nest1 {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+
+

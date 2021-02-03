@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@500&display=swap" rel="stylesheet">
     <link rel = "stylesheet" type = "text/css" href = "css/main.css" />
     <link rel = "stylesheet" type = "text/css" href = "css/reset.css" />
+    <link rel = "stylesheet" type = "text/css" href = "css/navigationMain.css" />
+    <link rel = "stylesheet" type = "text/css" href = "css/navigationItems.css" />
+    <link rel = "stylesheet" type = "text/css" href = "css/navigationNestedItems.css" />
 
 
 
@@ -46,7 +49,7 @@
                 </div>
 
                 <div id="settingPanelTitle">
-                    CONTROL PANEL
+                    SETTING PANEL
                 </div>
 
                 <div class="settingPanelTitleItemDivider">
@@ -54,7 +57,85 @@
                 </div>
 
                 <ul class ="settingPanelItems">
-                    <li>item one</li>
+
+                    <li>
+
+                        <div class="wrap-collapsible">
+                            <input id="collapsible" class="toggle" type="checkbox">
+                            <label for="collapsible" class="lbl-toggle">Transformation</label>
+                            <div class="collapsible-content">
+                                <div class="content-inner">
+                                    <div>
+
+                                        <!--nested groups-->
+
+                                            <div class="wrap-collapsible-nest1">
+                                                <input id="collapsible1" class="toggle" type="checkbox">
+                                                <label for="collapsible1" class="lbl-toggle-nest1">Translate</label>
+                                                <div class="collapsible-content">
+                                                    <div class="content-inner">
+                                                        <div>
+
+                                                            <!-- super-nested groups -->
+
+
+
+                                                            <!-- super-nested groups -->
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="wrap-collapsible-nest1">
+                                                <input id="collapsible2" class="toggle" type="checkbox">
+                                                <label for="collapsible2" class="lbl-toggle-nest1">Rotation</label>
+                                                <div class="collapsible-content">
+                                                    <div class="content-inner">
+                                                        <div>
+
+                                                            <!-- super-nested groups -->
+
+
+
+                                                            <!-- super-nested groups -->
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="wrap-collapsible-nest1">
+                                                <input id="collapsible3" class="toggle" type="checkbox">
+                                                <label for="collapsible3" class="lbl-toggle-nest1">Scale</label>
+                                                <div class="collapsible-content">
+                                                    <div class="content-inner">
+                                                        <div>
+
+                                                            <!-- super-nested groups -->
+
+
+
+                                                            <!-- super-nested groups -->
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        <!--nested groups-->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </li>
+
+
+
 
                 </ul>
 
