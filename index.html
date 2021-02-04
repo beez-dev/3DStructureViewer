@@ -13,6 +13,7 @@
     <link rel = "stylesheet" type = "text/css" href = "css/navItems.css" />
     <link rel = "stylesheet" type = "text/css" href = "css/navNestedItems.css" />
     <link rel = "stylesheet" type = "text/css" href = "css/navNestedItems_transformations.css" />
+    <link rel = "stylesheet" type = "text/css" href = "css/navNestedItems_shading.css" />
 
 
 
@@ -60,8 +61,8 @@
                     <li>
 
                         <div class="wrap-collapsible">
-                            <input id="collapsible" class="toggle" type="checkbox">
-                            <label for="collapsible" class="lbl-toggle">Transformation</label>
+                            <input id="collapsibleTransform" class="toggle" type="checkbox">
+                            <label for="collapsibleTransform" class="lbl-toggle">Transformation</label>
                             <div class="collapsible-content">
                                 <div class="content-inner">
                                     <div>
@@ -168,6 +169,78 @@
                             </div>
                         </div>
 
+                    </li>
+
+
+                    <li class="navLiAdjust">
+
+                        <div class="wrap-collapsible">
+                            <input id="collapsibleShade" class="toggle" type="checkbox">
+                            <label for="collapsibleShade" class="lbl-toggle">Shading and colors</label>
+                            <div class="collapsible-content">
+                                <div class="content-inner">
+                                    <div>
+
+                                        <!--nested groups-->
+                                        <div class="wrap-collapsible-nest1">
+                                            <input id="collapsible12" class="toggle" type="checkbox">
+                                            <label for="collapsible12" class="lbl-toggle-nest1">Surface Color</label>
+                                            <div class="collapsible-content-nest1">
+                                                <div class="content-inner-nest1">
+                                                    <div>
+
+                                                        <!-- super-nested groups -->
+                                                        <input type="color" id="modelSurfaceColor-real" value="#ff0000">
+                                                        <div id="modelSurfaceColor"></div>
+                                                        <!-- super-nested groups -->
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="wrap-collapsible-nest1">
+                                            <input id="collapsible13" class="toggle" type="checkbox">
+                                            <label for="collapsible13" class="lbl-toggle-nest1">Wire Color</label>
+                                            <div class="collapsible-content-nest1">
+                                                <div class="content-inner-nest1">
+                                                    <div>
+
+                                                        <!-- super-nested groups -->
+                                                        <input type="color" id="modelWireColor-real" value="#ff0000">
+                                                        <div id="modelWireColor"></div>
+                                                        <!-- super-nested groups -->
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="wrap-collapsible-nest1">
+                                            <input id="collapsible14" class="toggle" type="checkbox">
+                                            <label for="collapsible14" class="lbl-toggle-nest1">Canvas Background</label>
+                                            <div class="collapsible-content-nest1">
+                                                <div class="content-inner-nest1">
+                                                    <div>
+
+                                                        <!-- super-nested groups -->
+                                                        <input type="color" id="canvasBackgroundColor-real" value="#ff0000">
+                                                        <div id="canvasBackgroundColor"></div>
+                                                        <!-- super-nested groups -->
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--nested groups-->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </li>
 
@@ -182,7 +255,6 @@
         <div class="uploadButtonContainer">
             <input type="file" id="uploadModelButton-real">
             <div class="uploadButton">
-
             </div>
         </div>
 

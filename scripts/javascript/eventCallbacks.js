@@ -285,6 +285,12 @@ class EventCallback{
         return this.lastDownTarget;
     }
 
+    colorChooserHandler(target, globalProperty, reactant){
+        reactant.style.backgroundColor = target.value;
+        State[globalProperty] = target.value;
+        State.forceRedraw();
+    }
+
 
 }
 

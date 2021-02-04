@@ -12,11 +12,27 @@ const masterDIV = document.getElementById("masterDIV");
 masterDIV.style.width = Measures.px(WIDTH);
 masterDIV.style.height = Measures.px(HEIGHT);
 
+/* click delegation callbacks are assigned here */
 const uploadButton = document.querySelector('.uploadButton');
 uploadButton.addEventListener('click', function(event){
-        document.querySelector('#uploadModelButton-real').click();
+            document.querySelector('#uploadModelButton-real').click();
         });
 
+const modelSurfaceColorChooser = document.querySelector('#modelSurfaceColor');
+modelSurfaceColorChooser.addEventListener('click',function(){
+            document.querySelector('#modelSurfaceColor-real').click();
+        });
+
+const modelWireColorChooser = document.querySelector("#modelWireColor");
+modelWireColorChooser.addEventListener('click', function(){
+            document.querySelector('#modelWireColor-real').click();
+        });
+
+
+const canvasBgColorChooser = document.querySelector('#canvasBackgroundColor');
+canvasBgColorChooser.addEventListener('click', function(){
+            document.querySelector('#canvasBackgroundColor-real').click();
+        });
 
 const modeler = new ModelTransformations();
 
@@ -60,6 +76,10 @@ class State {
 
     static currentDrawTypeValue = State.SHADE_FLAT_WIRE;
     static currentShadingIndexValue = 2;                /*State.SHADE_FLAT_WIRE is the default shading*/
+
+    static canvasBackgroundColor = "#eaeaea";
+    static modelSurfaceColor = "#3c3c3c";
+    static modelWireColor = "#9b9b9b";
 
     static get shadings(){
         return State.shadingTypesAvailable;
@@ -331,15 +351,12 @@ class State {
 }
 
 
-class ConstantValue{
-
-}
-
-
 const zIndexFilter = new ZIndexFilter();
 
 const panner = new Panner();
 
 export { HEIGHT, WIDTH, mainCamera,
     panCamera,modeler, panner,
-    zIndexFilter, State, screenSpaceScaler};
+    zIndexFilter, State, screenSpaceScaler,
+    modelSurfaceColorChooser, modelWireColorChooser,
+    canvasBgColorChooser};

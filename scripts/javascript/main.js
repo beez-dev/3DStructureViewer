@@ -5,8 +5,8 @@ import {EventCallback} from "./eventCallbacks.js";
 import {Transformation} from "./transformation.js";
 import {Face, MeshUtils} from "./utils/meshUtils.js";
 import {Vec2, Vec3, Vec4} from "./utils/mathObjects.js";
-import {State, mainCamera} from "./init.js";
 import {TransformUtils} from "./utils/transformationUtils.js";
+import {State, mainCamera, modelSurfaceColorChooser, modelWireColorChooser, canvasBgColorChooser} from "./init.js";
 
 
 
@@ -22,8 +22,8 @@ function main(){
     mCtx.canvas.width = width;
     mCtx.canvas.height = height;
 
-    mCtx.fillStyle = "#eeeeee";
-    mCtx.fillRect( 0,0,width,height );
+    mCtx.fillStyle = `${State.canvasBackgroundColor}`;
+    mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
 
     let input = document.getElementById('uploadModelButton-real');
     let meshUtil = new MeshUtils();
@@ -56,7 +56,6 @@ function main(){
                 console.log( "faces: ", faces );
                 console.log( "viewCoordCaptures: ", viewCoordCaptures );*/
 
-
                 for( let i=0; i < fvis.length; i++ ){
                     faces[ i ] = new Face(fvis[i]);
                     let eachFvi = fvis[ i ];
@@ -66,7 +65,6 @@ function main(){
                          faces[i].viewSpaceVertices.push( viewCoordCaptures[ eachFvi[j] ] );
                     }
                 }
-
 
                 canvas.addEventListener("mousedown",
             function (event) {
@@ -85,27 +83,49 @@ function main(){
                         callbacks.mouseMoveHandler(event, ()=>forceRedraw());
                     }.bind(this));
 
-                canvas.addEventListener("mouseenter",
-                    function (event) {
+                canvas.addEventListener( "mouseenter",
+                    function ( event ) {
                         // forceRedraw();
                         callbacks.mouseEnteredHandler(event);
                     });
 
-                canvas.addEventListener("mouseleave", function (event) {
+                canvas.addEventListener( "mouseleave", function (event) {
                     // forceRedraw();
                     callbacks.mouseLeaveHandler(event);
-                });
+                } );
 
-                canvas.addEventListener('wheel', function (event) {
+                canvas.addEventListener( 'wheel', function (event) {
                         forceRedraw();
                         callbacks.scrollEventHandler(event);
                         return false;
-                    }, false
-                );
+                    }, false );
 
                 callbacks.translateLastX = document.getElementById("translateX").value;/*retain all repositioned values*/
                 callbacks.translateLastY = document.getElementById("translateY").value;
                 callbacks.translateLastZ = document.getElementById("translateZ").value;
+                callbacks.lastScale = document.getElementById("scale").value;
+                callbacks.lastRotX = document.getElementById("RotX").value;
+                callbacks.lastRotY = document.getElementById("RotY").value;
+
+                /*document.getElementById("surfaceColorPicker").oninput = function(){
+                    console.log("color changed: ", this.value);
+                };*/
+
+
+                document.getElementById("canvasBackgroundColor-real").oninput = function(){
+                    callbacks.colorChooserHandler(this,"canvasBackgroundColor", canvasBgColorChooser);
+                }
+
+                document.getElementById("modelWireColor-real").oninput = function(){
+                    callbacks.colorChooserHandler(this,"modelWireColor", modelWireColorChooser);
+                }
+
+
+                document.getElementById("modelSurfaceColor-real").oninput = function(){
+                    callbacks.colorChooserHandler(this,"modelSurfaceColor", modelSurfaceColorChooser);
+                }
+
+
 
                 document.getElementById("translateX").oninput = function(){
                     callbacks.sliderTranslateHandler( State.TRANSLATE_X, this, document.getElementById("translateMultiplier") );
@@ -184,10 +204,10 @@ function main(){
                 function drawLoop() {
 
                     if(State.redraw) {
-                        mCtx.fillStyle = "#eeeeee";
+                        mCtx.fillStyle = `${State.canvasBackgroundColor}`;
                         mCtx.fillRect(0, 0, global.WIDTH, global.HEIGHT);
-                        mCtx.fillStyle = "#3c3c3c";
-                        mCtx.strokeStyle = "#9b9b9b";
+                        mCtx.fillStyle = `${State.modelSurfaceColor}`;
+                        mCtx.strokeStyle = `${State.modelWireColor}`;
                         mTransform.pipelineTransform( inputVertices, outputVertices, viewCoordCaptures );
 
                         meshUtil.drawUsing(State.currentShadingType);
@@ -199,7 +219,6 @@ function main(){
                         State.disableRedraw(); /*disable redraw after one full cycle*/
                         // requestAnimationFrame(drawLoop);
                     }
-                    console.log("drawloop running");
                 }
 
                 drawLoop();
