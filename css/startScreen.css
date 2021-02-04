@@ -1,0 +1,134 @@
+#startScreen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 300;
+    opacity: 1.0;
+    transform: translateX(0px);
+    transition: all 500ms ease-out;
+}
+
+#startScreenContainer{
+    width:100%;
+    height:100%;
+    background-color: rgb(129, 129, 129);
+    position:relative;
+    padding-top:4%;
+}
+
+#logoMain {
+    width: 210px;
+    height:230px;
+    background: url("../images/icons/IC_3sv_logo.svg") no-repeat center center;
+    background-size:contain;
+    margin: 0 auto;
+}
+
+#webAppTitle{
+    text-align:center;
+    margin-top:10px;
+    font-size:60px;
+    color:#d9d9d9;
+    font-weight:bold;
+    font-style: italic;
+}
+
+#startScreenBrowseBtn {
+    width: 400px;
+    height: 50px;
+    background-color: #00ff00;
+    line-height: 47px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 4px;
+    background-color: #545454;
+    color:#d9d9d9;
+    font-weight: bold;
+    font-size: 25px;
+    cursor: pointer;
+    filter: drop-shadow(5px 5px 4px #2d2d2d);
+    transition: all 500ms ease-out;
+}
+
+#startScreenBrowseBtn:hover{
+    color: #161616;
+    filter: drop-shadow(-5px 5px 4px #262626);
+    background-color: #acacac;
+}
+
+#startScreenBrowseBtn:focus{
+    background-color: #ffffff;
+}
+
+#demoContainer{
+    width:100%;
+    height:100px;
+    margin-top:30px;
+    /*background-color:red;*/
+}
+
+.demoSwatchContainer{
+    width:700px;
+    margin:0 auto;
+}
+
+.demoSwatch{
+    width:200px;
+    height:100px;
+    background-color: #b1b1b1;
+    float:left;
+    border: 3px dashed #545454;
+    filter: drop-shadow(2px 2px 2px #54545400);
+    cursor:pointer;
+}
+
+.demoSwatchTitle {
+    width: 100%;
+    height: 35px;
+    text-align: center;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.demoSwatchThumb{
+    width:100%;
+    height:65px;
+    padding:10px;
+}
+
+.swatchThumbNailImageContainer{
+    width:100%;
+    height:100%;
+}
+
+.foxThumb{
+    background: url("../images/thumbnails/fox_thumb.png") no-repeat center center;
+    background-size: contain;
+}
+
+.weslyThumb{
+    background: url("../images/thumbnails/wesly_thumb.png") no-repeat center center;
+    background-size: contain;
+}
+
+.humanThumb{
+    background: url("../images/thumbnails/human_thumb.png") no-repeat center center;
+    background-size: contain;
+}
+
+.demoSwatch:hover {
+    filter: drop-shadow(4px 4px 2px #545454ff);
+}
+
+.demoSwatchAdjust{
+    margin-left: 50px;
+}
+
+
+
+.amaticFont{
+    font-family: 'Amatic SC', cursive;
+    text-align: center;
+}

@@ -3,9 +3,12 @@ import {Trackball, Pan, Panner} from "./camera.js";
 import {FZI, ZIndexFilter} from "./zIndexSorting.js";
 import {ModelTransformations, Scaler} from "./transformation.js";
 import {Convert, Measures} from "./utils/utils.js";
+import {EventCallback} from "./eventCallbacks.js";
 
 var WIDTH = document.documentElement.clientWidth;
 var HEIGHT = document.documentElement.clientHeight;
+
+const callbacks = new EventCallback();
 
 
 const masterDIV = document.getElementById("masterDIV");
@@ -16,6 +19,11 @@ masterDIV.style.height = Measures.px(HEIGHT);
 const uploadButton = document.querySelector('.uploadButton');
 uploadButton.addEventListener('click', function(event){
             document.querySelector('#uploadModelButton-real').click();
+        });
+
+const startScreenBrowseBtn = document.querySelector('#startScreenBrowseBtn');
+startScreenBrowseBtn.addEventListener('click', function(event){
+            callbacks.handleStartScreenBrowse(event);
         });
 
 const modelSurfaceColorChooser = document.querySelector('#modelSurfaceColor');
@@ -33,6 +41,8 @@ const canvasBgColorChooser = document.querySelector('#canvasBackgroundColor');
 canvasBgColorChooser.addEventListener('click', function(){
             document.querySelector('#canvasBackgroundColor-real').click();
         });
+
+
 
 const modeler = new ModelTransformations();
 
@@ -63,6 +73,10 @@ class State {
     static scaleXValue = State.defaultScale;
     static scaleYValue = State.defaultScale;
     static scaleZValue = State.defaultScale;
+
+    /*
+    * indicates whether the browse button was pressed in the start screen*/
+    static startScreenBrowsed = false;
 
     /*recalculation optimization variables for projection transformations*/
     static reCalcPerspectiveProjection  =  true;
@@ -360,4 +374,4 @@ export { HEIGHT, WIDTH, mainCamera,
     panCamera,modeler, panner,
     zIndexFilter, State, screenSpaceScaler,
     modelSurfaceColorChooser, modelWireColorChooser,
-    canvasBgColorChooser};
+    canvasBgColorChooser, callbacks};

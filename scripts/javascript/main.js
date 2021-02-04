@@ -6,7 +6,8 @@ import {Transformation} from "./transformation.js";
 import {Face, MeshUtils} from "./utils/meshUtils.js";
 import {Vec2, Vec3, Vec4} from "./utils/mathObjects.js";
 import {TransformUtils} from "./utils/transformationUtils.js";
-import {State, mainCamera, modelSurfaceColorChooser, modelWireColorChooser, canvasBgColorChooser} from "./init.js";
+import {State, mainCamera, modelSurfaceColorChooser, modelWireColorChooser,
+                            callbacks,canvasBgColorChooser} from "./init.js";
 
 
 
@@ -27,14 +28,21 @@ function main(){
 
     let input = document.getElementById('uploadModelButton-real');
     let meshUtil = new MeshUtils();
-    let callbacks = new EventCallback();
     let parser = null;
 
 
     input.addEventListener('change', function (e) {
         mCtx.clearRect(0,0,width,height);
         parser = new ObjParser( e.target,
-            function wholeDraw() {
+            function () {
+
+                /*remove the start screen*/
+                if(State.startScreenBrowsed){
+                    document.querySelector("#startScreen").style.transform = `translate(-${global.WIDTH}px)`;
+                    document.querySelector("#startScreen").style.opacity = 0.0;
+
+                }
+
                 let filename = parser.getAvailableFileNames(); /*single file support only*/
                 let objectName = parser.getAvailableObjectNames( filename );
                 /*model space vertices of the object

@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scaleScreenSpace=1.0">
-    <title>Document</title>
+    <title>3SV</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@500&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
+
     <link rel = "stylesheet" type = "text/css" href = "css/main.css" />
+    <link rel = "stylesheet" type = "text/css" href = "css/startScreen.css" />
     <link rel = "stylesheet" type = "text/css" href = "css/reset.css" />
     <link rel = "stylesheet" type = "text/css" href = "css/navMain.css" />
     <link rel = "stylesheet" type = "text/css" href = "css/navItems.css" />
@@ -34,7 +39,60 @@
 
     <div id="masterDIV">
 
-        <div id="burgerIconContainer">
+        <div id="startScreen">
+            <div id="startScreenContainer">
+                <div id="logoMain">
+                </div>
+                <div id="webAppTitle" class="amaticFont">
+                    3D Structure Viewer
+                </div>
+
+                <div id="startScreenBrowseBtn" class="amaticFont">
+                    browse wavefront(.obj) files
+                </div>
+
+                <div id="demoContainer">
+                    <div class="demoSwatchContainer">
+                        <div class="demoSwatch">
+                            <div class="demoSwatchTitle amaticFont">
+                                Fox
+                            </div>
+                            <div class="demoSwatchThumb">
+                                <div class="swatchThumbNailImageContainer foxThumb">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="demoSwatch demoSwatchAdjust">
+                            <div class="demoSwatchTitle amaticFont">
+                                Wesly
+                            </div>
+                            <div class="demoSwatchThumb">
+                                <div class="swatchThumbNailImageContainer weslyThumb">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="demoSwatch demoSwatchAdjust">
+                            <div class="demoSwatchTitle amaticFont">
+                                Human
+                            </div>
+                            <div class="demoSwatchThumb">
+                                <div class="swatchThumbNailImageContainer humanThumb">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div id="burgerIconContainer" title="toggle settings panel">
             <div id="burgerIcon">
             </div>
         </div>
@@ -61,7 +119,7 @@
                     <li>
 
                         <div class="wrap-collapsible">
-                            <input id="collapsibleTransform" class="toggle" type="checkbox">
+                            <input id="collapsibleTransform" class="toggle" type="checkbox" checked>
                             <label for="collapsibleTransform" class="lbl-toggle">Transformation</label>
                             <div class="collapsible-content">
                                 <div class="content-inner">
@@ -70,7 +128,7 @@
                                         <!--nested groups-->
 
                                             <div class="wrap-collapsible-nest1">
-                                                <input id="collapsible1" class="toggle" type="checkbox">
+                                                <input id="collapsible1" class="toggle" type="checkbox" checked>
                                                 <label for="collapsible1" class="lbl-toggle-nest1">Translate</label>
                                                 <div class="collapsible-content-nest1">
                                                     <div class="content-inner-nest1">
@@ -79,22 +137,22 @@
                                                             <!-- super-nested groups -->
 
                                                             <div class="slideContainer">
-                                                                <label class="superNestedLabels" for="translateX">M: </label>
+                                                                <label class="superNestedLabels" for="translateX" title="multiplier for translation value">M: </label>
                                                                 <input id="translateMultiplier" type="range" min="1" max="99" value="30" class="slider">
                                                             </div>
 
                                                             <div class="slideContainer slideContainerAdjust">
-                                                                <label class="superNestedLabels" for="translateX">X: </label>
+                                                                <label class="superNestedLabels" for="translateX" title="translation along X axis">X: </label>
                                                                 <input id="translateX" type="range" min="1" max="99" value="50" class="slider">
                                                             </div>
 
                                                             <div class="slideContainer slideContainerAdjust">
-                                                                <label class="superNestedLabels" for="translateY">Y: </label>
+                                                                <label class="superNestedLabels" for="translateY" title="translation along Y axis">Y: </label>
                                                                 <input id="translateY" type="range" min="1" max="99" value="50" class="slider">
                                                             </div>
 
                                                             <div class="slideContainer slideContainerAdjust">
-                                                                <label class="superNestedLabels" for="translateZ">Z: </label>
+                                                                <label class="superNestedLabels" for="translateZ" title="translation along Z axis">Z: </label>
                                                                 <input id="translateZ" type="range" min="1" max="99" value="50" class="slider">
                                                             </div>
 
@@ -106,7 +164,7 @@
                                             </div>
 
                                             <div class="wrap-collapsible-nest1">
-                                                <input id="collapsible2" class="toggle" type="checkbox">
+                                                <input id="collapsible2" class="toggle" type="checkbox" checked>
                                                 <label for="collapsible2" class="lbl-toggle-nest1">Scale</label>
                                                 <div class="collapsible-content-nest1">
                                                     <div class="content-inner-nest1">
@@ -115,12 +173,12 @@
                                                             <!-- super-nested groups -->
 
                                                             <div class="slideContainer">
-                                                                <label class="superNestedLabels" for="scale">M: </label>
+                                                                <label class="superNestedLabels" for="scale" title="multiplier for scaling value">M: </label>
                                                                 <input id="scaleMultiplier" type="range" min="1" max="100" value="1" class="slider">
                                                             </div>
 
                                                             <div class="slideContainer slideContainerAdjust">
-                                                                <label class="superNestedLabels" for="scale">S: </label>
+                                                                <label class="superNestedLabels" for="scale" title="scale the model">S: </label>
                                                                 <input id="scale" type="range" min="1" max="100" value="50" class="slider">
                                                             </div>
 
@@ -132,7 +190,7 @@
                                             </div>
 
                                             <div class="wrap-collapsible-nest1">
-                                                <input id="collapsible3" class="toggle" type="checkbox">
+                                                <input id="collapsible3" class="toggle" type="checkbox" checked>
                                                 <label for="collapsible3" class="lbl-toggle-nest1">Rotation</label>
                                                 <div class="collapsible-content-nest1">
                                                     <div class="content-inner-nest1">
@@ -141,17 +199,17 @@
                                                             <!-- super-nested groups -->
 
                                                             <div class="slideContainer">
-                                                                <label class="superNestedLabels" for="RotX">M: </label>
+                                                                <label class="superNestedLabels" for="rotationMultiplier" title="multiplier for rotation value">M: </label>
                                                                 <input id="rotationMultiplier" type="range" min="1" max="100" value="1" class="slider">
                                                             </div>
 
                                                             <div class="slideContainer slideContainerAdjust">
-                                                                <label class="superNestedLabels" for="RotX">X: </label>
+                                                                <label class="superNestedLabels" for="RotX" title="X axis rotation">X: </label>
                                                                 <input id="RotX" type="range" min="1" max="100" value="50" class="slider">
                                                             </div>
 
                                                             <div class="slideContainer slideContainerAdjust">
-                                                                <label class="superNestedLabels" for="RotY">Y: </label>
+                                                                <label class="superNestedLabels" for="RotY" title="Y axis rotation">Y: </label>
                                                                 <input id="RotY" type="range" min="1" max="100" value="50" class="slider">
                                                             </div>
 
@@ -175,7 +233,7 @@
                     <li class="navLiAdjust">
 
                         <div class="wrap-collapsible">
-                            <input id="collapsibleShade" class="toggle" type="checkbox">
+                            <input id="collapsibleShade" class="toggle" type="checkbox" checked>
                             <label for="collapsibleShade" class="lbl-toggle">Shading and colors</label>
                             <div class="collapsible-content">
                                 <div class="content-inner">
@@ -183,7 +241,7 @@
 
                                         <!--nested groups-->
                                         <div class="wrap-collapsible-nest1">
-                                            <input id="collapsible12" class="toggle" type="checkbox">
+                                            <input id="collapsible12" class="toggle" type="checkbox" checked>
                                             <label for="collapsible12" class="lbl-toggle-nest1">Surface Color</label>
                                             <div class="collapsible-content-nest1">
                                                 <div class="content-inner-nest1">
@@ -201,14 +259,14 @@
 
 
                                         <div class="wrap-collapsible-nest1">
-                                            <input id="collapsible13" class="toggle" type="checkbox">
+                                            <input id="collapsible13" class="toggle" type="checkbox" checked>
                                             <label for="collapsible13" class="lbl-toggle-nest1">Wire Color</label>
                                             <div class="collapsible-content-nest1">
                                                 <div class="content-inner-nest1">
                                                     <div>
 
                                                         <!-- super-nested groups -->
-                                                        <input type="color" id="modelWireColor-real" value="#ff0000">
+                                                        <input type="color" id="modelWireColor-real" value="#ff0000" checked>
                                                         <div id="modelWireColor"></div>
                                                         <!-- super-nested groups -->
 
@@ -220,7 +278,7 @@
 
 
                                         <div class="wrap-collapsible-nest1">
-                                            <input id="collapsible14" class="toggle" type="checkbox">
+                                            <input id="collapsible14" class="toggle" type="checkbox" checked>
                                             <label for="collapsible14" class="lbl-toggle-nest1">Canvas Background</label>
                                             <div class="collapsible-content-nest1">
                                                 <div class="content-inner-nest1">
@@ -279,7 +337,6 @@
 
 
         </div>
-
 
     </div>
 

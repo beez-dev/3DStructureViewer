@@ -292,6 +292,12 @@ class EventCallback{
     }
 
 
+    handleStartScreenBrowse(event){
+        State.startScreenBrowsed = true;
+        document.querySelector('#uploadModelButton-real').click();
+    }
+
+
 }
 
 
