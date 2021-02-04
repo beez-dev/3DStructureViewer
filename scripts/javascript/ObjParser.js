@@ -22,7 +22,7 @@ class ObjParser {
         Array.from(inputElement.files).forEach(file => {
             /* loose checks for obj files */
             if ( file.name.endsWith(ObjParser.OBJ_EXTENSION) ) {
-                if (file.type === ObjParser.OBJ_FILE_TYPE) {
+                if (file.type === ObjParser.OBJ_FILE_TYPE || file.type==="") {
                     this.getSelectedFiles().push(file);
                     this.getObjectData()[file.name] = {};
                 } else {
