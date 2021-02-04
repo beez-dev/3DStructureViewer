@@ -120,18 +120,17 @@ function main(){
                 };
 
                 document.getElementById("scale").oninput = function(){
-                    callbacks.sliderScaleHandler(this);
+                    callbacks.sliderScaleHandler(this, document.getElementById("scaleMultiplier"));
                 }
 
 
                 document.getElementById("RotX").oninput = function(){
-                    callbacks.sliderRotationHandler(State.ROT_X, this);
+                    callbacks.sliderRotationHandler(State.ROT_X, this, document.getElementById("rotationMultiplier"));
                 }
 
-                document.getElementById("RotX").oninput = function(){
-                    callbacks.sliderRotationHandler(State.ROT_Y,this);
+                document.getElementById("RotY").oninput = function(){
+                    callbacks.sliderRotationHandler(State.ROT_Y, this, document.getElementById("rotationMultiplier"));
                 }
-
 
 
                 document.getElementById("burgerIcon").addEventListener("click",
@@ -165,6 +164,9 @@ function main(){
                     function(event){
                             callbacks.shadingSelectionHandler(event);
                     });
+
+
+
 
                 function forceRedraw(){
                     State.enableRedraw();

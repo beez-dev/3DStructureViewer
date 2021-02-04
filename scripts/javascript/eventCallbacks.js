@@ -36,33 +36,13 @@ class EventCallback{
         console.log("key is pressed");
     }
 
-    sliderScaleHandler( target){
-        /*
-        let sliderScaleFactor = .05;
-        if(scaleDir === State.SCALE_X){
-            let direction = this.getSliderDirection(this.scaleLastX, target.value);
-            modeler.scaleXFac(direction * sliderScaleFactor * multiplier.value);
-            // screenSpaceScaler.scaleXFac = direction * sliderScaleFactor * multiplier.value;
-            this.scaleLastX = target.value;
-        }else if(scaleDir === State.SCALE_Y){
-            let direction = this.getSliderDirection(this.scaleLastY, target.value);
-            modeler.scaleYFac(direction * sliderScaleFactor * multiplier.value);
-            // screenSpaceScaler.scaleYFac = direction * sliderScaleFactor * multiplier.value;
-            this.scaleLastY = target.value;
-        }else if(scaleDir === State.SCALE_Z){
-            /!*this basically simulates perspective to orthographic projection yet not being the actual matrix transformation
-            * the z-axis is flattened*!/
-            let direction = this.getSliderDirection(this.scaleLastZ, target.value);
-            // screenSpaceScaler.scaleZFac = direction * sliderScaleFactor * multiplier.value;
-            modeler.scaleZFac(direction * sliderScaleFactor * multiplier.value);
-            this.scaleLastZ = target.value;
-        }*/
+    sliderScaleHandler( target , multiplier){
 
-        if ( this.getSliderDirection(this.lastScale,target.value) > 0 ) {
-            Scale.incrementScale();
-        } else {
-            Scale.decrementScale();
-        }
+        let scaleFactor = .05;
+        let direction = this.getSliderDirection(this.lastScale, target.value)
+
+        State.scaleFac(direction* scaleFactor * multiplier.value);
+
         this.lastScale = target.value;
 
         State.forceRedraw();
@@ -93,16 +73,17 @@ class EventCallback{
         }
     }
 
-    sliderRotationHandler(rotationDir, target){
-        console.log("rotation triggered");
+    sliderRotationHandler(rotationDir, target, multiplier){
+        let rotationControlFactor = 10;
         if(rotationDir === State.ROT_X) {
-            console.log("rotation triggered");
             let direction = this.getSliderDirection(this.lastRotX, target.value);
-            modeler.rotX( direction * Math.abs(this.lastRotX - target.value) );
+            modeler.rotX( direction * (Math.abs(this.lastRotX - target.value)/rotationControlFactor) * multiplier.value );
             this.lastRotX = target.value;
         }else{
-            // modeler.rotY(-directionX * scrollSpeedX * Math.abs(this.mouseDownX - eventClientX));
-            // this.lastRotY = target.value;
+            console.log("y rotation triggered");
+            let direction = this.getSliderDirection(this.lastRotY, target.value);
+            modeler.rotY( direction * (Math.abs(this.lastRotY - target.value)/rotationControlFactor) * multiplier.value );
+            this.lastRotY = target.value;
         }
 
         State.forceRedraw();

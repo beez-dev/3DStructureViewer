@@ -194,6 +194,13 @@ class State {
         return State.currentScale;
     }
 
+    static scaleFac(fac){
+        State.currentScale = 1;
+        State.currentScale += fac;
+        State.scaleUniform(State.currentScale);
+        return State.currentScale;
+    }
+
     /* gradually scaleScreenSpace down the object */
     static decrementScale() {
         State.currentScale = 1; /*reset scaleScreenSpace start point*/
