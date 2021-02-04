@@ -82,6 +82,7 @@
     border: 3px dashed #545454;
     filter: drop-shadow(2px 2px 2px #54545400);
     cursor:pointer;
+    overflow: hidden;
 }
 
 .demoSwatchTitle {
@@ -95,8 +96,10 @@
 .demoSwatchThumb{
     width:100%;
     height:65px;
-    padding:10px;
+    padding-top:10px;
+    padding-bottom:9px;
 }
+
 
 .swatchThumbNailImageContainer{
     width:100%;
@@ -107,6 +110,11 @@
     background: url("../images/thumbnails/fox_thumb.png") no-repeat center center;
     background-size: contain;
 }
+
+.demoSwatchThumb:hover{
+    background-color: #545454;
+}
+
 
 .weslyThumb{
     background: url("../images/thumbnails/wesly_thumb.png") no-repeat center center;

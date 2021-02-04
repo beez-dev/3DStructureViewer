@@ -1,5 +1,5 @@
 class Demo{
-    static foxModel = `# Blender v2.91.2 OBJ File: ''
+    static fox = `# Blender v2.91.2 OBJ File: ''
 # www.blender.org
 o FoxObjectData_foxMeshdata
 v 1.199407 -0.855210 -0.379191
@@ -40669,7 +40669,7 @@ f 6286 9437 9422 9438
 f 2974 2958 1551 1865
 f 2342 2343 1687 1688`;
 
-    static modelKeys = ['foxModel', 'wesly', 'human'];
+    static modelKeys = [Demo.FOX_MODEL, Demo.WESLY_MODEL, Demo.HUMAN_MODEL];
 
     /*clear variable memory except the one in use*/
     static clearMemory(except=[]){
@@ -40681,6 +40681,23 @@ f 2342 2343 1687 1688`;
             }
         }
     }
+    
+    static get FOX_MODEL(){
+        return "fox";    
+    }
+    
+    static get WESLY_MODEL(){
+        return "wesly";    
+    }
+    
+    static get HUMAN_MODEL(){
+        return "human";
+    }
+
+    /*/!*file object used to create a usable file like variable for the the object parser*!/
+    static getFfileObject(name, type){
+        return {"name":name, "type": type}
+    }*/
 }
 
 export {Demo};

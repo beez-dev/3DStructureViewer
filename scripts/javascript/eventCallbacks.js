@@ -4,6 +4,9 @@ import {
     modeler, panCamera, panner,
     mainCamera, State, State as Scale, screenSpaceScaler
 } from "./init.js";
+import {Demo} from "../demoModels/demoModels.js";
+import * as global from "./init.js";
+import {mainEvent} from "./main.js";
 
 class EventCallback{
 
@@ -292,9 +295,18 @@ class EventCallback{
     }
 
 
-    handleStartScreenBrowse(event){
+    handleStartScreenUncover(event){
         State.startScreenBrowsed = true;
         document.querySelector('#uploadModelButton-real').click();
+    }
+
+    demoFileHandler(modelKey){
+        State.demoFileName = modelKey+".obj";
+        State.demoFile = Demo[modelKey];
+        document.querySelector("#startScreen").style.transform = `translate(-${global.WIDTH}px)`;
+        document.querySelector("#startScreen").style.opacity = 0;
+        // Demo.clearMemory([modelKey]);
+        mainEvent(null);
     }
 
 

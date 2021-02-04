@@ -1,5 +1,6 @@
 import * as mUtils from './utils/utils.js';
 import {Vec4} from "./utils/mathObjects.js";
+import {State} from "./init.js";
 
 
 class ObjParser {
@@ -8,6 +9,7 @@ class ObjParser {
     * */
     constructor(inputElement, onReady=null) {
         //this.inputElement = inputElement;
+        inputElement = inputElement != null ? inputElement.target: null;
         this.setStatus(ObjParser.STATUS_EMPTY);
         this.selectedFiles = [];
         this.processedNoOfFiles = 0;
@@ -19,7 +21,18 @@ class ObjParser {
 
         // this.vertexTextureCoords = {};
         // this.vertexNormals = {};
-        Array.from(inputElement.files).forEach(file => {
+
+        let inputElementFiles = [];
+        if(State.demoFileName !== null){
+            let file = new File([State.demoFile], State.demoFileName, {
+                type: "",
+            });
+            inputElementFiles.push(file);
+        }else{
+            inputElementFiles = inputElement!=null? inputElement.files: [];
+        }
+
+        Array.from(inputElementFiles).forEach(file => {
             /* loose checks for obj files */
             if ( file.name.endsWith(ObjParser.OBJ_EXTENSION) ) {
                 if (file.type === ObjParser.OBJ_FILE_TYPE || file.type==="") {

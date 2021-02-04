@@ -4,6 +4,7 @@ import {FZI, ZIndexFilter} from "./zIndexSorting.js";
 import {ModelTransformations, Scaler} from "./transformation.js";
 import {Convert, Measures} from "./utils/utils.js";
 import {EventCallback} from "./eventCallbacks.js";
+import {Demo} from "../demoModels/demoModels.js";
 
 var WIDTH = document.documentElement.clientWidth;
 var HEIGHT = document.documentElement.clientHeight;
@@ -23,8 +24,23 @@ uploadButton.addEventListener('click', function(event){
 
 const startScreenBrowseBtn = document.querySelector('#startScreenBrowseBtn');
 startScreenBrowseBtn.addEventListener('click', function(event){
-            callbacks.handleStartScreenBrowse(event);
+            callbacks.handleStartScreenUncover(event);
         });
+
+const foxThumb = document.querySelector('.foxThumb');
+foxThumb.addEventListener('click',function(event){
+        callbacks.demoFileHandler(Demo.FOX_MODEL);
+});
+
+const weslyThumb = document.querySelector('.weslyThumb');
+weslyThumb.addEventListener('click',function(event){
+        callbacks.demoFileHandler(Demo.WESLY_MODEL);
+});
+
+const humanThumb = document.querySelector('.humanThumb');
+humanThumb.addEventListener('click',function(event){
+        callbacks.demoFileHandler(Demo.HUMAN_MODEL);
+});
 
 const modelSurfaceColorChooser = document.querySelector('#modelSurfaceColor');
 modelSurfaceColorChooser.addEventListener('click',function(){
@@ -77,6 +93,8 @@ class State {
     /*
     * indicates whether the browse button was pressed in the start screen*/
     static startScreenBrowsed = false;
+    static demoFile = null;/*initially no demo file has been selected*/
+    static demoFileName = null;
 
     /*recalculation optimization variables for projection transformations*/
     static reCalcPerspectiveProjection  =  true;
