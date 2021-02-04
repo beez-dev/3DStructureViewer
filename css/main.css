@@ -8,15 +8,24 @@ body{
 }
 
 .uploadButtonContainer{
-    width:54px;
-    height:34px;
+    width:70px;
+    height:44px;
     position:absolute;
     /*background-color: aqua;*/
     right: 0px;
     top:0px;
     margin-right:20px;
     margin-top:20px;
-    filter: drop-shadow(0px 0px 4px #000000);
+    background-color: #b1b1b1;
+    border-radius: 100px;
+    padding: 2px;
+    filter:drop-shadow(0px 0px 0px #ffffff00);
+
+}
+
+.uploadButtonContainer:hover {
+    filter: drop-shadow(2px 2px 2px #949494);
+
 }
 
 #uploadModelButton-real{
@@ -29,20 +38,31 @@ body{
     background: url('../images/icons/IC_upload_128BY80.svg') no-repeat center top;
     background-size:contain;
     cursor:pointer;
+}
 
+.uploadButton:hover{
+    background: url('../images/icons/IC_upload_128BY80_hover.svg') no-repeat center top;
+    background-size:contain;
 }
 
 
 #burgerIconContainer{
-    width:54px;
-    height:24px;
+    width:70px;
+    height:44px;
     position:absolute;
-    /*background-color: aqua;*/
     left: 0px;
     top:0px;
+    padding:9px;
     margin-left:20px;
     margin-top:20px;
-    filter: drop-shadow(0px 0px 4px #000000);
+    border-radius: 100px;
+    background-color: #b1b1b1;
+    filter:drop-shadow(0px 0px 0px #ffffff00);
+
+}
+
+#burgerIconContainer:hover{
+    filter: drop-shadow(2px 2px 2px #949494);
 }
 
 #burgerIcon{
@@ -51,6 +71,11 @@ body{
     background: url("../images/icons/IC_burgerMenu.svg") no-repeat center center;
     background-size:contain;
     cursor:pointer;
+}
+
+#burgerIcon:hover{
+    background: url("../images/icons/IC_burgerMenu_hover.svg") no-repeat center center;
+    background-size:contain;
 }
 
 #closeSettingPanelContainer{
@@ -71,8 +96,6 @@ body{
 
 
 .bottomRightIconsMainContainer {
-    width: 20%;
-    height: 34px;
     right: 0px;
     bottom: 0px;
     /*background-color: #ec506b;*/
@@ -83,43 +106,52 @@ body{
     right: 0px;
 }
 
-
-
-
-
-.bottomItemContainer {
-    width: 10%;
-    height: 100%;
-    background-size:contain;
-    float: right;
-    cursor:pointer;
-    min-width: 34px;
-    max-width: 44px;
-    filter: drop-shadow(0px 0px 4px #000000);
-    position:relative;
+.roundWrapper{
+    width:50px;
+    height:50px;
+    float:right;
+    padding:10px;
+    background-color: #b1b1b1;
+    border-radius: 100px;
+    filter:drop-shadow(0px 0px 0px #ffffff00);
 }
+
+.roundWrapper:hover{
+    filter: drop-shadow(2px 2px 2px #949494);
+}
+
+.roundWrapperAdjust{
+    margin-right:18px;
+}
+
 
 .bottomItem{
     width:100%;
     height:100%;
-    /*background-color: green;*/
     background-size:contain;
-    position:absolute;
-    right:0px;
-    top:0px;
+    cursor:pointer;
+
 }
 
-.bottomItemAdjust{
-    margin-right:20px;
-}
 
 .rotateIcon {
     background: url("../images/icons/IC_turntableAnimation.svg") no-repeat center center;
     background-size:contain;
 }
 
+.rotateIcon:hover{
+    background: url("../images/icons/IC_turntableAnimation_hover.svg") no-repeat center center;
+    background-size:contain;
+
+}
+
 .projectionSwitch{
     background: url("../images/icons/IC_projectionType.svg") no-repeat center center;
+    background-size:contain;
+}
+
+.projectionSwitch:hover{
+    background: url("../images/icons/IC_projectionType_hover.svg") no-repeat center center;
     background-size:contain;
 }
 
@@ -128,44 +160,7 @@ body{
     background-size:contain;
 }
 
-
-
-
-.tooltip{
-    position:relative;
-    background-color:green;
+.shadingTypeSelection:hover{
+    background: url("../images/icons/IC_shadingType_hover.svg") no-repeat center center;
+    background-size:contain;
 }
-
-.tooltipText {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: -130%;
-    left: 0px;
-    font-size: 11px;
-    border: 1px dashed grey;
-    border-radius: 10px;
-    /*background-color: red;*/
-    text-align: center;
-    /*visibility: hidden;*/
-    filter: drop-shadow(0px 0px 0px #ff0000);
-    opacity:.4;
-    padding-right:5px;
-    padding-left:5px;
-}
-
-#settingPanelMain{
-
-}
-
-
-
-
-
-
-
-
-
-
-
-

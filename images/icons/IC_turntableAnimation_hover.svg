@@ -13,7 +13,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (0767f8302a, 2020-10-17)"
-   sodipodi:docname="IC_turntableAnimation.svg">
+   sodipodi:docname="IC_turntableAnimation_hover.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -24,8 +24,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="513.92162"
-     inkscape:cy="135.18846"
+     inkscape:cx="591.3707"
+     inkscape:cy="352.03661"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -65,7 +65,7 @@
        y="41.635452" />
     <path
        id="path10"
-       style="opacity:1;fill:#545454;fill-opacity:1;stroke-width:9.16131;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;stop-color:#000000"
+       style="opacity:1;fill:#7f7f7f;fill-opacity:1;stroke-width:9.16131;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;stop-color:#000000"
        d="M 381.52539,157.36328 C 272.91677,157.48338 174.71088,221.7343 131.02734,321.02734 H 107.8125 l 63.78125,103.83594 69.44531,-103.83594 h -21.36328 c 36.49609,-53.63157 97.18086,-85.81192 162.15234,-85.8125 108.33858,-3.7e-4 196.16444,87.82549 196.16407,196.16407 -7.1e-4,108.33779 -87.82626,196.16248 -196.16407,196.16211 -67.80701,-1.7e-4 -130.80578,-35.01876 -166.60156,-92.60743 h -87.09375 c 42.07849,103.08639 142.3517,170.46116 253.69531,170.46094 151.33462,-7e-5 274.01556,-122.68102 274.01563,-274.01562 -7e-5,-151.33463 -122.681,-274.01556 -274.01563,-274.01563 z m 0.30273,144.12891 A 129.88546,129.88546 0 0 0 251.94336,431.37891 129.88546,129.88546 0 0 0 381.82812,561.26367 129.88546,129.88546 0 0 0 511.71484,431.37891 129.88546,129.88546 0 0 0 381.82812,301.49219 Z"
        transform="scale(0.26458333)" />
   </g>

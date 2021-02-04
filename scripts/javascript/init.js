@@ -78,6 +78,7 @@ class State {
     static currentShadingIndexValue = 2;                /*State.SHADE_FLAT_WIRE is the default shading*/
 
     static canvasBackgroundColor = "#eaeaea";
+    // static canvasBackgroundColor = "#2f2f2f";
     static modelSurfaceColor = "#3c3c3c";
     static modelWireColor = "#9b9b9b";
 
