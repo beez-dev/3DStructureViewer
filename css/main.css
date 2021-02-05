@@ -165,3 +165,10 @@ body{
     background: url("../images/icons/IC_shadingType_hover.svg") no-repeat center center;
     background-size:contain;
 }
+
+#instruction{
+    margin-top:20px;
+    font-size:20px;
+    font-weight: bold;
+    filter: drop-shadow(2px 2px 2px #ffffff);
+}
