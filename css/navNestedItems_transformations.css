@@ -50,3 +50,26 @@
     background: #8a8a8a;
     cursor: pointer;
 }
+
+#clampYRotCheckbox{
+    width:20px;
+    height:20px;
+    display: inline-block;
+    margin-top:5px;
+    border-radius: 2px;
+    padding-top: 5px;
+    background: #ffffff url("../images/icons/IC_checkbox.png") no-repeat center center;
+    background-size:contain;
+    display:inline-block;
+}
+
+#clampYRotCheckbox:hover{
+    border:1px dashed #000000;
+}
+
+#clampYRotCheckboxLabel{
+    font-size: 18px;
+    margin-left:10px;
+    color:white;
+    display:inline-block;
+}

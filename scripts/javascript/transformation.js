@@ -65,26 +65,6 @@ class Transformation {
         if( State.orthographicEnabled ){
             if ( State.getOrthoProjectionRecalc() ) {
                 /*recalculate*/
-                /*let top = Math.tan(fovHalf) * near;
-                let right = aspectRatio * top;
-                let bottom = -top;
-                let left = -top * aspectRatio;
-
-                /!*x and y multipliers saved for optimization*!/
-                this.x1m = 2  / (right - left);
-                this.x2m = (right + left) / (left - right);
-
-                this.y1m = 2  / (top - bottom);
-                this.y2m = (top + bottom) / (bottom - top);
-
-                this.z1m = 2 / ( near - far);
-                this.z2m = (far + near) / (near- far);
-
-                this.w1m = 1;
-                State.disableOrthoProjectionRecalc();*/
-
-
-                /*recalculate*/
                 let top = Math.tan(fovHalf) * near;
                 let right = aspectRatio * top;
                 let bottom = -top;
@@ -143,7 +123,7 @@ class Transformation {
     * vec4 come from the model space
     * */
     pipeline(vec4In, vec4Out, captureBuffer, captureBufferPosition) {
-        return screenSpaceScaler.scaleScreenSpace(this.screenTransform(
+        return this.screenTransform(
             this.ndcTransform(
                 this.orthographicProjection(
                     this.perspectiveProjection(
@@ -154,7 +134,6 @@ class Transformation {
                     )
                 )
              )
-          )
        );
     }
 
@@ -189,6 +168,8 @@ class ModelTransformations{
         this.xRotation = 0;
         this.autoRotation = false;
         this.autoRotateAnimationID = -1;
+        this.lowerXRotationLimit = -1.120499999999999;
+        this.upperXRotationLimit = 1.1295000000000013;
     }
 
     rotateY(vec4In, vec4Out){
@@ -217,6 +198,13 @@ class ModelTransformations{
 
     rotX(fac){
         this.xRotation += fac;
+        if(State.clampYRot) {
+            if (this.xRotation < this.lowerXRotationLimit) {
+                this.xRotation = this.lowerXRotationLimit;
+            } else if (this.xRotation > this.upperXRotationLimit) {
+                this.xRotation = this.upperXRotationLimit;
+            }
+        }
     }
 
 

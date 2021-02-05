@@ -116,10 +116,11 @@ function mainEvent(e) {
             callbacks.lastRotX = document.getElementById("RotX").value;
             callbacks.lastRotY = document.getElementById("RotY").value;
 
-            /*document.getElementById("surfaceColorPicker").oninput = function(){
-                console.log("color changed: ", this.value);
-            };*/
-
+            document.getElementById("clampYRotCheckbox").addEventListener(
+                'click', function(event){
+                    callbacks.clampYRotHandler(event);
+                }
+            )
 
             document.getElementById("canvasBackgroundColor-real").oninput = function () {
                 callbacks.colorChooserHandler(this, "canvasBackgroundColor", canvasBgColorChooser);
@@ -171,11 +172,6 @@ function mainEvent(e) {
                     callbacks.closeSettingPanelHandler(event);
                 });
 
-            /*document.addEventListener("keypress",
-            function (event) {
-                    forceRedraw();
-                    callbacks.keyPressHandler(event);
-                });*/
 
             document.getElementsByClassName("rotateIcon")[0].addEventListener("click",
                 function (event) {

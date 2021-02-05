@@ -90,6 +90,8 @@ class State {
     static scaleYValue = State.defaultScale;
     static scaleZValue = State.defaultScale;
 
+    static clampYRot = true;/*clamp rotation by default*/
+
     /*
     * indicates whether the browse button was pressed in the start screen*/
     static startScreenBrowsed = false;

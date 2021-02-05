@@ -83,13 +83,25 @@ class EventCallback{
             modeler.rotX( direction * (Math.abs(this.lastRotX - target.value)/rotationControlFactor) * multiplier.value );
             this.lastRotX = target.value;
         }else{
-            console.log("y rotation triggered");
             let direction = this.getSliderDirection(this.lastRotY, target.value);
             modeler.rotY( direction * (Math.abs(this.lastRotY - target.value)/rotationControlFactor) * multiplier.value );
             this.lastRotY = target.value;
         }
 
         State.forceRedraw();
+
+    }
+
+    clampYRotHandler(event){
+        if(State.clampYRot === true){
+            event.target.style.background = "#ffffff url('')";
+            State.clampYRot = false;
+        }else{
+            event.target.style.background = "#ffffff url('../images/icons/IC_checkbox.png') no-repeat center center";
+            event.target.backgroundSize = "contain";
+            State.clampYRot = true;
+
+        }
 
     }
 
