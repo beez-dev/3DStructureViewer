@@ -3,7 +3,7 @@
 Hey guys, this is a HTML5 canvas implementation of an .obj 3D file viewer and it's in vanilla javascript!! 
 
 I've kept it stacked away for quite some time and it was a small bit of work to begin with, but I thought for students and 3D programming starters
-this can be a good template and code study material, so I've opened it to the public.  
+this can be a good template and code study material, so I've opened it up.  
   
 In the forth coming days, I'll be sparing some time to restructure the equations, comments and document this, so feel free to send any suggestions and PRs, cuz' 
 I love anything 3D! ;-)
