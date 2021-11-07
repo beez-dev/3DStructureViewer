@@ -16,4 +16,4 @@ Some things to note:
 - correct drawing implements a version of painter's algorithm.
 - the standard openGL pipeline is used as a reference, although a more simplified version of the pipeline is used for ease of transformation(will try to 
   fully mimic the openGL pipeline in the forth coming days.)
-  
+- The code has no backend, it's all FE. ;-) 
