@@ -10,6 +10,7 @@ I love anything 3D! ;-)
 
 
 Some things to note:
+- Some understanding of linear algebra is required to understand the code.
 - The code doesn't use any third party libraries, it's plain HTML5 canvas.
 - The z-index is a simulated version of your typical z-buffer implementation(this bit of code needs a complete rehaul, and will attempt in forth coming days) ,
   basically for now, it's the position of the farthest vertex from the screen.
